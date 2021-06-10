@@ -1,0 +1,15 @@
+export default {
+  fontSize10: '10px',
+  fontSize12: '12px',
+  fontSize14: '14px',
+  fontSize16: '16px',
+  fontSize18: '18px',
+  fontSize24: '24px',
+  fontSize28: '28px',
+  robotoLight: 'Roboto-Light',
+  robotoRegular: 'Roboto-Regular',
+  robotoMedium: 'Roboto-Medium',
+  robotoBold: 'Roboto-Bold',
+  sourceSerifProLight: 'SourceSerifPro-Light',
+  sourceSerifProRegular: 'SourceSerifPro-Regular',
+};
