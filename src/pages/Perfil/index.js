@@ -14,8 +14,9 @@ import api from '../../services/api';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
+import DatePicker from '../../components/DatePicker';
 import LoadingModal from '../../components/LoadingModal';
-import CustomAlert from '../../components/Alert';
+import CustomAlert from '../../components/CustomAlert';
 
 import editAvatar from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/bt_editar_avatar.svg';
 import userIcon from '../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-equipe.svg';
@@ -34,20 +35,19 @@ import {
 } from './styles';
 
 const schema = Yup.object().shape({
+  nome: Yup.string().required('Nome inválido.'),
+  date: Yup.string()
+    .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/, 'Data inválida.')
+    .required('Data inválida.'),
+  sexo: Yup.string().required('Selecione o sexo.'),
   fone: Yup.string()
     .matches(
       /^\+[5-5]{2} \([1-9]{2}\) [0-9]{5}-[0-9]{4}$/,
-      'Por favor, digite um telefone válido.',
+      'Telefone inválido.',
     )
-    .required('Por favor, digite um telefone válido.'),
-  cpf: Yup.string()
-    .matches(
-      /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/,
-      'Por favor, digite um CPF válido.',
-    )
-    .required('Por favor, digite um CPF válido.'),
-  cidade: Yup.string().required('Por favor, digite uma cidade válida.'),
-  estado: Yup.string().required('Por favor, selecione o estado.'),
+    .required('Telefone inválido.'),
+  cidade: Yup.string().required('Cidade inválida.'),
+  estado: Yup.string().required('Selecione o estado.'),
 });
 
 const SignUp = () => {
@@ -55,6 +55,7 @@ const SignUp = () => {
     useAuth();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const [date, setDate] = useState('');
   const [estadoListOptions] = useState([
     {
       value: 'AC',
@@ -166,8 +167,22 @@ const SignUp = () => {
     },
   ]);
   const [estado, setEstado] = useState('');
+  const [sexoListOptions] = useState([
+    {
+      value: 'Masculino',
+      label: 'Masculino',
+    },
+    {
+      value: 'Feminino',
+      label: 'Feminino',
+    },
+  ]);
+  const [sexo, setSexo] = useState('');
   const [errors, setErrors] = useState({
+    nome: null,
+    date: null,
     fone: null,
+    sexo: null,
     cidade: null,
     estado: null,
   });
@@ -176,7 +191,10 @@ const SignUp = () => {
   const [userAvatar, setUserAvatar] = useState(false);
 
   useEffect(() => {
+    console.log(user);
+    setDate(user.birth_date);
     setEstado(user.state);
+    setSexo(user.genrer);
     setUserAvatar(!!user.avatar);
     setIsEditing(false);
     setLoading(false);
@@ -184,7 +202,10 @@ const SignUp = () => {
 
   useEffect(() => {
     setErrors({
+      nome: null,
+      date: null,
       fone: null,
+      sexo: null,
       cidade: null,
       estado: null,
     });
@@ -205,8 +226,10 @@ const SignUp = () => {
   const handleSignUp = useCallback(
     async data => {
       const isEqual =
+        data.nome === user.name &&
+        date === user.birth_date &&
+        sexo === user.genrer &&
         data.fone === user.phone &&
-        data.cpf === user.document &&
         data.cidade === user.city &&
         estado === user.state;
 
@@ -217,15 +240,21 @@ const SignUp = () => {
       if (!isEqual) {
         setLoading(true);
         try {
+          data.sexo = sexo;
+          data.date = date;
           data.estado = estado;
           await schema.validate(data, {
             abortEarly: false,
           });
 
+          console.log('data: ', data);
+
           updateUser({
             ...user,
+            name: data.nome,
+            birth_date: data.date,
+            genrer: data.sexo,
             phone: data.fone,
-            document: data.cpf,
             city: data.cidade,
             state: data.estado,
           });
@@ -241,7 +270,7 @@ const SignUp = () => {
         }
       }
     },
-    [errors, estado, user, updateUser],
+    [errors, estado, user, updateUser, date, sexo],
   );
 
   const handleUpdateAvatar = useCallback(() => {
@@ -278,6 +307,106 @@ const SignUp = () => {
         .catch(error => console.log(error));
     });
   }, [user, updateUser]);
+
+  const handleNameBlur = useCallback(
+    async value => {
+      const nameSchema = Yup.object().shape({
+        nome: Yup.string().required('Nome inválido.'),
+      });
+
+      console.log(value);
+
+      const data = {
+        nome: value,
+      };
+
+      try {
+        await nameSchema.validate(data, {
+          abortEarly: false,
+        });
+
+        setErrors({
+          ...errors,
+          nome: null,
+        });
+      } catch (error) {
+        error.inner.forEach(err => {
+          const {message} = err;
+          setErrors({
+            ...errors,
+            nome: message,
+          });
+        });
+      }
+    },
+    [errors],
+  );
+
+  const handleBirthDateBlur = useCallback(
+    async value => {
+      const birthDateSchema = Yup.object().shape({
+        date: Yup.string()
+          .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/, 'Data inválida.')
+          .required('Data inválida.'),
+      });
+
+      const data = {
+        date: value,
+      };
+
+      try {
+        await birthDateSchema.validate(data, {
+          abortEarly: false,
+        });
+
+        setErrors({
+          ...errors,
+          date: null,
+        });
+      } catch (error) {
+        error.inner.forEach(err => {
+          const {message} = err;
+          setErrors({
+            ...errors,
+            date: message,
+          });
+        });
+      }
+    },
+    [errors],
+  );
+
+  const handleGenderBlur = useCallback(
+    async value => {
+      const genderSchema = Yup.object().shape({
+        sexo: Yup.string().required('Selecione o sexo.'),
+      });
+
+      const data = {
+        sexo: value,
+      };
+
+      try {
+        await genderSchema.validate(data, {
+          abortEarly: false,
+        });
+
+        setErrors({
+          ...errors,
+          sexo: null,
+        });
+      } catch (error) {
+        error.inner.forEach(err => {
+          const {message} = err;
+          setErrors({
+            ...errors,
+            sexo: message,
+          });
+        });
+      }
+    },
+    [errors],
+  );
 
   const handleFoneBlur = useCallback(
     async value => {
@@ -380,42 +509,16 @@ const SignUp = () => {
     [errors],
   );
 
-  const handleCPFBlur = useCallback(
-    async value => {
-      const cpfSchema = Yup.object().shape({
-        cpf: Yup.string()
-          .matches(
-            /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/,
-            'Por favor, digite um CPF válido.',
-          )
-          .required('Por favor, digite um CPF válido.'),
+  useEffect(() => {
+    if (date) {
+      setErrors(oldErrors => {
+        return {
+          ...oldErrors,
+          date: null,
+        };
       });
-
-      const data = {
-        cpf: value,
-      };
-
-      try {
-        await cpfSchema.validate(data, {
-          abortEarly: false,
-        });
-
-        setErrors({
-          ...errors,
-          cpf: null,
-        });
-      } catch (error) {
-        error.inner.forEach(err => {
-          const {message} = err;
-          setErrors({
-            ...errors,
-            cpf: message,
-          });
-        });
-      }
-    },
-    [errors],
-  );
+    }
+  }, [date]);
 
   return (
     <Container>
@@ -443,36 +546,42 @@ const SignUp = () => {
             </UserAvatarButton>
           </UserAvatarContainer>
           <FormView>
-            <Input
-              name="nome"
-              // label={'Nome'}
-              value={user.name}
-              editable={false}
-            />
-            <Row>
-              <Input
-                name="nascimento"
-                label={'Nascimento'}
-                value={user.birth_date}
-                editable={false}
-                width={'45%'}
-              />
-              <Input
-                name="sexo"
-                label={'Sexo'}
-                value={user.genrer}
-                editable={false}
-                width={'45%'}
-              />
-            </Row>
-            <Input
-              name="email"
-              label={'E-mail'}
-              value={user.email}
-              editable={false}
-            />
             {!isEditing && (
               <>
+                <Input
+                  name="nome"
+                  label={'Nome'}
+                  value={user.name}
+                  editable={false}
+                  edit
+                  handleEdit={() => setIsEditing(true)}
+                />
+                <Row>
+                  <Input
+                    name="nascimento"
+                    label={'Nascimento'}
+                    value={user.birth_date}
+                    editable={false}
+                    edit
+                    handleEdit={() => setIsEditing(true)}
+                    width={'45%'}
+                  />
+                  <Input
+                    name="sexo"
+                    label={'Sexo'}
+                    value={user.genrer}
+                    editable={false}
+                    edit
+                    handleEdit={() => setIsEditing(true)}
+                    width={'45%'}
+                  />
+                </Row>
+                <Input
+                  name="email"
+                  label={'E-mail'}
+                  value={user.email}
+                  editable={false}
+                />
                 <Input
                   name="fone"
                   label={'Telefone'}
@@ -486,8 +595,6 @@ const SignUp = () => {
                   label={'CPF'}
                   value={user.document}
                   editable={false}
-                  edit
-                  handleEdit={() => setIsEditing(true)}
                 />
                 <Input
                   name="endereco"
@@ -504,14 +611,67 @@ const SignUp = () => {
           {isEditing && (
             <Formik
               initialValues={{
-                fone: user.phone,
+                nome: user.name,
+                date: user.birth_date,
                 cpf: user.document,
+                email: user.email,
+                fone: user.phone,
+                sexo: user.genrer,
                 cidade: user.city,
                 estado: user.state,
               }}
               onSubmit={handleSignUp}>
               {({handleChange, handleBlur, handleSubmit, values}) => (
                 <FormView>
+                  <Input
+                    name="nome"
+                    placeholder={'Nome'}
+                    label={'Nome'}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    onChangeText={handleChange('nome')}
+                    onBlur={handleBlur('nome')}
+                    handleBlur={() => handleNameBlur(values.nome)}
+                    value={values.nome}
+                    error={errors.nome}
+                    keyboardType="default"
+                  />
+                  <Row>
+                    <DatePicker
+                      name="date"
+                      placeholder={'Nascimento'}
+                      label={'Nascimento'}
+                      onChangeText={handleChange('date')}
+                      onBlur={handleBlur('date')}
+                      handleBlur={value => handleBirthDateBlur(value)}
+                      value={values.date}
+                      initiaValue={user.birth_date}
+                      error={errors.date}
+                      getValue={value => setDate(value)}
+                      options={sexoListOptions}
+                      width={'45%'}
+                    />
+                    <Select
+                      name="sexo"
+                      placeholder={'Sexo'}
+                      label={'Sexo'}
+                      onChangeText={handleChange('sexo')}
+                      onBlur={handleBlur('sexo')}
+                      handleBlur={value => handleGenderBlur(value)}
+                      value={values.sexo}
+                      initiaValue={user.genrer}
+                      error={errors.sexo}
+                      getValue={value => setSexo(value)}
+                      options={sexoListOptions}
+                      width={'45%'}
+                    />
+                  </Row>
+                  <Input
+                    name="email"
+                    label={'E-mail'}
+                    value={user.email}
+                    editable={false}
+                  />
                   <Input
                     name="fone"
                     mask={'+55 ([99]) [99999]-[9999]'}
@@ -528,17 +688,9 @@ const SignUp = () => {
                   />
                   <Input
                     name="cpf"
-                    mask={'[999].[999].[999]-[99]'}
-                    placeholder={'CPF'}
                     label={'CPF'}
-                    autoCorrect={false}
-                    autoCapitalize="none"
-                    onChangeText={handleChange('cpf')}
-                    onBlur={handleBlur('cpf')}
-                    handleBlur={() => handleCPFBlur(values.cpf)}
-                    value={values.cpf}
-                    error={errors.cpf}
-                    keyboardType="number-pad"
+                    value={user.document}
+                    editable={false}
                   />
                   <Input
                     name="cidade"
@@ -609,15 +761,18 @@ const SignUp = () => {
       </KeyboardAvoidingView>
       <LoadingModal visible={loading} />
       <CustomAlert
-        showAlert={showAlert}
+        visible={showAlert}
         title={'Ocorreu um erro'}
-        message={'Não foi possível atualizar seu perfil!'}
-        confirmText={'Tentar novamente'}
+        message={
+          'Não foi possível atualizar seu perfil. Deseja tentar novamente?'
+        }
+        confirmButtonText={'Sim'}
         onConfirm={() => {
           setShowAlert(false);
         }}
-        cancelText={'Cancelar'}
+        cancelButtonText={'Não'}
         onCancel={() => setIsEditing(false)}
+        cancelable
         onDismiss={() => setShowAlert(false)}
       />
     </Container>

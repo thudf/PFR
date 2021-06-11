@@ -12,18 +12,15 @@ import api from '../../services/api';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import LoadingModal from '../../components/LoadingModal';
-import CustomAlert from '../../components/Alert';
+import CustomAlert from '../../components/CustomAlert';
 
 import {Container, Scroll, Title, FormView} from './styles';
 
 const schema = Yup.object().shape({
-  newPassword: Yup.string().required('Por favor, digite uma senha válida.'),
+  newPassword: Yup.string().required('Senha inválida.'),
   confirmPassword: Yup.string()
-    .oneOf(
-      [Yup.ref('newPassword'), null],
-      'Por favor, digite uma senha válida.',
-    )
-    .required('Por favor, digite uma senha válida.'),
+    .oneOf([Yup.ref('newPassword'), null], 'Senha inválida.')
+    .required('Senha inválida.'),
 });
 
 const NewPassword = ({route}) => {
@@ -52,9 +49,7 @@ const NewPassword = ({route}) => {
 
         setLoading(true);
 
-        const response = await api.put('/confirm-recover', newData);
-
-        console.log('response: ', response);
+        await api.put('/confirm-recover', newData);
 
         navigation.navigate('NewPasswordSuccess');
         setLoading(false);
@@ -81,9 +76,7 @@ const NewPassword = ({route}) => {
   const handleNewPasswordBlur = useCallback(
     async value => {
       const newPasswordSchema = Yup.object().shape({
-        newPassword: Yup.string().required(
-          'Por favor, digite uma senha válida.',
-        ),
+        newPassword: Yup.string().required('Senha inválida.'),
       });
 
       const data = {
@@ -116,8 +109,8 @@ const NewPassword = ({route}) => {
     async value => {
       const confirmPasswordSchema = Yup.object().shape({
         confirmPassword: Yup.string()
-          .oneOf([value.newPassword], 'Por favor, digite uma senha válida.')
-          .required('Por favor, digite uma senha válida.'),
+          .oneOf([value.newPassword], 'Senha inválida.')
+          .required('Senha inválida.'),
       });
 
       const data = {
@@ -208,15 +201,19 @@ const NewPassword = ({route}) => {
       </KeyboardAvoidingView>
       <LoadingModal visible={loading} />
       <CustomAlert
-        showAlert={showAlert}
+        visible={showAlert}
         title={'Ocorreu um erro'}
-        message={'Não foi possível recuperar sua senha!'}
-        confirmText={'Tentar novamente'}
+        message={
+          'Não foi possível recuperar sua senha. Deseja tentar novamente?'
+        }
+        confirmButtonText={'Sim'}
         onConfirm={() => {
           setShowAlert(false);
         }}
-        cancelText={'Cancelar'}
+        cancelButtonText={'Não'}
         onCancel={() => navigation.navigate('SignIn')}
+        cancelable
+        onDismiss={() => setShowAlert(false)}
       />
     </Container>
   );

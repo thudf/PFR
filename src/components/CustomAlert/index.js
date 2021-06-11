@@ -1,14 +1,17 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React from 'react';
 import {Modal, Text} from 'react-native';
-import {SvgXml} from 'react-native-svg';
+// import {SvgXml} from 'react-native-svg';
 
-import {colors} from '../../global';
+// import {colors} from '../../global';
 
 import {
   ModalAlert,
   ModalAlertClose,
   AlertContainer,
+  AlertTitleContainer,
+  AlertTitle,
+  AlertMessageContainer,
+  AlertMessage,
   AlertCommandsContainer,
   AlertCommandsButton,
   AlertCommandText,
@@ -16,10 +19,11 @@ import {
 
 const CustomAlert = ({
   visible,
-  handleVisibleFalse,
   icon,
   title,
+  titleAlign,
   message,
+  messageAlign,
   cancelable = false,
   onCancel = () => console.log('cancel'),
   cancelButtonText,
@@ -39,17 +43,28 @@ const CustomAlert = ({
           onPress={() => {
             if (cancelable) {
               onDismiss();
-              handleVisibleFalse();
             }
           }}
         />
         <AlertContainer>
-          {title && <Text>{title}</Text>}
-          {message && <Text>{message}</Text>}
+          {title && (
+            <AlertTitleContainer textAlign={titleAlign}>
+              <AlertTitle>{title}</AlertTitle>
+            </AlertTitleContainer>
+          )}
+
+          {message && (
+            <AlertMessageContainer textAlign={messageAlign}>
+              <AlertMessage>{message}</AlertMessage>
+            </AlertMessageContainer>
+          )}
+
           <AlertCommandsContainer
             multiple={cancelButtonText && confirmButtonText}>
             {confirmButtonText && (
-              <AlertCommandsButton onPress={() => onConfirm()}>
+              <AlertCommandsButton
+                hasBorder={cancelButtonText}
+                onPress={() => onConfirm()}>
                 <AlertCommandText cancelButton={false}>
                   {confirmButtonText}
                 </AlertCommandText>

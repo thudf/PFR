@@ -12,14 +12,14 @@ import api from '../../services/api';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import LoadingModal from '../../components/LoadingModal';
-import CustomAlert from '../../components/Alert';
+import CustomAlert from '../../components/CustomAlert';
 
 import {Container, Scroll, Title, FormView} from './styles';
 
 const schema = Yup.object().shape({
   code: Yup.string()
-    .matches(/^[\S]{4}$/, 'Por favor, digite um código válido.')
-    .required('Por favor, digite um código válido.'),
+    .matches(/^[\S]{4}$/, 'Código inválido.')
+    .required('Código inválido.'),
 });
 
 const SendCode = ({route}) => {
@@ -34,10 +34,9 @@ const SendCode = ({route}) => {
       try {
         setLoading(true);
 
-        const response = await api.post('/verify-code', data);
+        await api.post('/verify-code', data);
 
-        console.log('response: ', response);
-
+        setLoading(false);
         navigation.navigate('NewPassword', {code: data.code, email});
       } catch (error) {
         console.log('error: ', error?.response?.data?.error);
@@ -106,15 +105,19 @@ const SendCode = ({route}) => {
       </KeyboardAvoidingView>
       <LoadingModal visible={loading} />
       <CustomAlert
-        showAlert={showAlert}
+        visible={showAlert}
         title={'Ocorreu um erro'}
-        message={'Não foi possível validar seu código!'}
-        confirmText={'Tentar novamente'}
+        message={
+          'Não foi possível validar seu código. Deseja tentar novamente?'
+        }
+        confirmButtonText={'Sim'}
         onConfirm={() => {
           setShowAlert(false);
         }}
-        cancelText={'Cancelar'}
+        cancelButtonText={'Não'}
         onCancel={() => navigation.navigate('SignIn')}
+        cancelable
+        onDismiss={() => setShowAlert(false)}
       />
     </Container>
   );

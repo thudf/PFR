@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import {SvgXml} from 'react-native-svg';
@@ -249,7 +250,7 @@ const AuthRoutes = () => {
                 paddingLeft: 15,
                 paddingRight: 15,
               }}
-              onPress={() => navigation.navigate('NewPassword')}>
+              onPress={() => navigation.navigate('SignIn')}>
               <SvgXml xml={arrowLeftIcon} width={18} height={18} />
               <Text
                 style={{
@@ -384,7 +385,7 @@ const AuthRoutes = () => {
                 paddingLeft: 15,
                 paddingRight: 15,
               }}
-              onPress={() => navigation.navigate('CreatePassword')}>
+              onPress={() => navigation.navigate('SignIn')}>
               <SvgXml xml={arrowLeftIcon} width={18} height={18} />
               <Text
                 style={{

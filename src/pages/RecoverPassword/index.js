@@ -12,14 +12,12 @@ import api from '../../services/api';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import LoadingModal from '../../components/LoadingModal';
-import CustomAlert from '../../components/Alert';
+import CustomAlert from '../../components/CustomAlert';
 
 import {Container, Scroll, MainText, Title, FormView} from './styles';
 
 const schema = Yup.object().shape({
-  email: Yup.string()
-    .email('Por favor, digite um e-mail válido.')
-    .required('Por favor, digite um e-mail válido.'),
+  email: Yup.string().email('E-mail inválido.').required('E-mail inválido.'),
 });
 
 const RecoverPassword = () => {
@@ -33,7 +31,6 @@ const RecoverPassword = () => {
 
   const handleSignIn = useCallback(
     async data => {
-      console.log('aqui');
       try {
         await schema.validate(data, {
           abortEarly: false,
@@ -45,9 +42,7 @@ const RecoverPassword = () => {
           email: data.email,
         };
 
-        const response = await api.post('/recover', newData);
-
-        console.log('response: ', response);
+        await api.post('/recover', newData);
 
         setLoading(false);
         navigation.navigate('CheckEmail', {email: data.email});
@@ -122,18 +117,19 @@ const RecoverPassword = () => {
       </KeyboardAvoidingView>
       <LoadingModal visible={loading} />
       <CustomAlert
-        showAlert={showAlert}
+        visible={showAlert}
         title={'Ocorreu um erro'}
-        message={'Não foi possível enviar o código!'}
-        confirmText={'Tentar novamente'}
+        message={'Não foi possível enviar o código. Deseja tentar novamente?'}
+        confirmButtonText={'Sim'}
         onConfirm={() => {
           setShowAlert(false);
         }}
-        cancelText={'Cancelar'}
+        cancelButtonText={'Não'}
         onCancel={() => {
           setShowAlert(false);
           navigation.navigate('SignIn');
         }}
+        cancelable
         onDismiss={() => setShowAlert(false)}
       />
     </Container>

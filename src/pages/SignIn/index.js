@@ -18,7 +18,7 @@ import {colors} from '../../global';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import LoadingModal from '../../components/LoadingModal';
-import CustomAlert from '../../components/Alert';
+import CustomAlert from '../../components/CustomAlert';
 
 import logoImg from '../../assets/logo.png';
 import ou from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/ou.svg';
@@ -34,10 +34,8 @@ import {
 } from './styles';
 
 const schema = Yup.object().shape({
-  email: Yup.string()
-    .email('Por favor, digite um e-mail válido.')
-    .required('Por favor, digite um e-mail válido.'),
-  password: Yup.string().required('Por favor, digite uma senha válida.'),
+  email: Yup.string().email('E-mail inválido.').required('E-mail inválido.'),
+  password: Yup.string().required('Senha inválida.'),
 });
 
 const SignIn = () => {
@@ -94,8 +92,8 @@ const SignIn = () => {
       console.log('teste');
       const emailSchema = Yup.object().shape({
         email: Yup.string()
-          .email('Por favor, digite um e-mail válido.')
-          .required('Por favor, digite um e-mail válido.'),
+          .email('E-mail inválido.')
+          .required('E-mail inválido.'),
       });
 
       const data = {
@@ -127,7 +125,7 @@ const SignIn = () => {
   const handlePasswordBlur = useCallback(
     async value => {
       const passwordSchema = Yup.object().shape({
-        password: Yup.string().required('Por favor, digite uma senha válida.'),
+        password: Yup.string().required('Senha inválida.'),
       });
 
       const data = {
@@ -251,17 +249,14 @@ const SignIn = () => {
         </ScrollView>
         <LoadingModal visible={loading} />
         <CustomAlert
-          showAlert={showAlert}
+          visible={showAlert}
           title={'Ocorreu um erro'}
-          message={'Não foi possível iniciar sua sessão!'}
-          confirmText={'Tentar novamente'}
+          message={'Não foi possível iniciar sua sessão. Tente novamente!'}
+          confirmButtonText={'OK'}
           onConfirm={() => {
             setShowAlert(false);
           }}
-          cancelText={'Cancelar'}
-          onCancel={() => {
-            setShowAlert(false);
-          }}
+          cancelable
           onDismiss={() => setShowAlert(false)}
         />
       </Container>

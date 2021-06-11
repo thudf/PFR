@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {Linking} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 
@@ -8,6 +8,10 @@ import face from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/face_conta
 import insta from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/insta_contacts.svg';
 import linkedin from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/linkedin_contacts.svg';
 import qualitare from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/qualitare.svg';
+
+import LoadingModal from '../../components/LoadingModal';
+
+import api from '../../services/api';
 
 import {
   ContactText,
@@ -22,6 +26,40 @@ import {
 } from './styles';
 
 const Info = () => {
+  const [loading, setLoading] = useState(false);
+  const [infos, setInfos] = useState({
+    description: null,
+    phone: null,
+    email: null,
+    site: null,
+  });
+
+  const getInfo = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const response = await api.get('channel');
+      console.log(response.data);
+
+      const {data} = response;
+
+      setInfos({
+        description: data.description,
+        phone: data.phone,
+        email: data.email,
+        site: data.site,
+      });
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    getInfo();
+  }, [getInfo]);
+
   return (
     <Container>
       <Scroll
@@ -29,17 +67,11 @@ const Info = () => {
         contentContainerStyle={{flexGrow: 1, alignItems: 'center'}}>
         <Logo source={logoImg} />
         <Title>Sobre o Instituto</Title>
-        <MainText>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut.
-          Aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit.
-        </MainText>
+        <MainText>{infos.description}</MainText>
         <Title style={{marginBottom: 15}}>Nossos canais</Title>
-        <ContactText>+ 55 (83) 98151-0355</ContactText>
-        <ContactText>institutocarolinabandeira@exemplo.com.br</ContactText>
-        <ContactText>www.institutocarolinabandeira.com.br</ContactText>
+        <ContactText>{infos.phone}</ContactText>
+        <ContactText>{infos.email}</ContactText>
+        <ContactText>{infos.site}</ContactText>
         <SocialMedias>
           <SocialMediaButton
             last={false}
@@ -69,6 +101,7 @@ const Info = () => {
           <SvgXml xml={qualitare} width={155} height={20} />
         </MadeBy>
       </Scroll>
+      <LoadingModal visible={loading} />
     </Container>
   );
 };

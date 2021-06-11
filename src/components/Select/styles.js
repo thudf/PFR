@@ -78,18 +78,23 @@ export const ModalPicker = styled.View`
   width: 100%;
   background-color: transparent;
   position: relative;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ModalPickerClose = styled.TouchableOpacity`
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   background-color: rgba(29, 30, 34, 0.7);
 `;
 
 export const PickerContainer = styled.View`
-  position: absolute;
+  /* position: absolute;
   top: ${props => (props.pickerTop ? props.pickerTop : 40)}%;
-  left: 5%;
+  left: 5%; */
   width: 90%;
   background-color: ${colors.darkGrey};
   border-radius: 4px;

@@ -1,24 +1,26 @@
-import styled from 'styled-components/native';
+import styled, {css} from 'styled-components/native';
 
 import {colors, fonts} from '../../global';
 
 export const ModalAlert = styled.View`
+  align-items: center;
+  justify-content: center;
+  position: relative;
   height: 100%;
   width: 100%;
   background-color: transparent;
-  position: relative;
 `;
 
 export const ModalAlertClose = styled.TouchableOpacity`
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   background-color: rgba(29, 30, 34, 0.7);
 `;
 
 export const AlertContainer = styled.View`
-  position: absolute;
-  top: ${props => (props.pickerTop ? props.pickerTop : 40)}%;
-  left: 5%;
   width: 90%;
   background-color: ${colors.white};
   border-radius: 4px;
@@ -26,6 +28,36 @@ export const AlertContainer = styled.View`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+`;
+
+export const AlertTitleContainer = styled.View`
+  flex-direction: row;
+  width: 90%;
+  margin-bottom: 10px;
+  align-items: center;
+  justify-content: ${props =>
+    props.textAlign === 'left' ? 'flex-start' : 'center'};
+`;
+
+export const AlertTitle = styled.Text`
+  font-family: ${fonts.robotoMedium};
+  font-size: ${fonts.fontSize24};
+  color: ${colors.black};
+`;
+
+export const AlertMessageContainer = styled.View`
+  flex-direction: row;
+  width: 90%;
+  align-items: center;
+  justify-content: ${props =>
+    props.textAlign === 'left' ? 'flex-start' : 'center'};
+`;
+
+export const AlertMessage = styled.Text`
+  font-family: ${fonts.robotoLight};
+  font-size: ${fonts.fontSize18};
+  color: ${colors.black};
+  text-align: center;
 `;
 
 export const AlertCommandsContainer = styled.View`
@@ -44,6 +76,13 @@ export const AlertCommandsButton = styled.TouchableOpacity`
   padding-bottom: 20px;
   align-items: center;
   justify-content: center;
+
+  ${props =>
+    props.hasBorder &&
+    css`
+      border-right-color: ${colors.lightGrey};
+      border-right-width: 1px;
+    `};
 `;
 
 export const AlertCommandText = styled.Text`

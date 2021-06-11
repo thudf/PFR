@@ -38,6 +38,10 @@ export const FormView = styled.View`
 export const UserAvatarContainer = styled.View`
   margin-top: 32px;
   position: relative;
+  width: 136px;
+  height: 136px;
+  border-radius: 68px;
+  background-color: ${colors.darkGrey};
 `;
 
 export const UserAvatar = styled.Image`

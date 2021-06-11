@@ -10,20 +10,17 @@ import {colors} from '../../global';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import LoadingModal from '../../components/LoadingModal';
-import CustomAlert from '../../components/Alert';
+import CustomAlert from '../../components/CustomAlert';
 
 import {useAuth} from '../../hooks/Auth';
 
 import {Container, Scroll, Title, FormView} from './styles';
 
 const schema = Yup.object().shape({
-  newPassword: Yup.string().required('Por favor, digite uma senha válida.'),
+  newPassword: Yup.string().required('Senha inválida.'),
   confirmPassword: Yup.string()
-    .oneOf(
-      [Yup.ref('newPassword'), null],
-      'Por favor, digite uma senha válida.',
-    )
-    .required('Por favor, digite uma senha válida.'),
+    .oneOf([Yup.ref('newPassword'), null], 'Senha inválida.')
+    .required('Senha inválida.'),
 });
 
 const ChangePassword = ({route}) => {
@@ -41,7 +38,7 @@ const ChangePassword = ({route}) => {
 
   useEffect(() => {
     if (oldPassword === user.password) {
-      console.log('aqui');
+      console.log('');
     } else {
       navigation.navigate('ChangePasswordSuccess');
     }
@@ -88,9 +85,7 @@ const ChangePassword = ({route}) => {
   const handleNewPasswordBlur = useCallback(
     async value => {
       const newPasswordSchema = Yup.object().shape({
-        newPassword: Yup.string().required(
-          'Por favor, digite uma senha válida.',
-        ),
+        newPassword: Yup.string().required('Senha inválida.'),
       });
 
       const data = {
@@ -123,8 +118,8 @@ const ChangePassword = ({route}) => {
     async value => {
       const confirmPasswordSchema = Yup.object().shape({
         confirmPassword: Yup.string()
-          .oneOf([value.newPassword], 'Por favor, digite uma senha válida.')
-          .required('Por favor, digite uma senha válida.'),
+          .oneOf([value.newPassword], 'Senha inválida.')
+          .required('Senha inválida.'),
       });
 
       const data = {
@@ -198,6 +193,8 @@ const ChangePassword = ({route}) => {
                   value={values.confirmPassword}
                   error={errors.confirmPassword}
                   keyboardType="default"
+                  returnKeyType="send"
+                  onSubmitEditing={() => handleSignIn(values)}
                 />
                 <Button
                   style={{marginTop: 70, marginBottom: 52}}
@@ -213,18 +210,22 @@ const ChangePassword = ({route}) => {
       </KeyboardAvoidingView>
       <LoadingModal visible={loading} />
       <CustomAlert
-        showAlert={showAlert}
+        visible={showAlert}
         title={'Ocorreu um erro'}
-        message={'Não foi possível atualizar sua senha!'}
-        confirmText={'Tentar novamente'}
+        message={
+          'Não foi possível atualizar sua senha. Deseja tentar novamente?'
+        }
+        confirmButtonText={'Sim'}
         onConfirm={() => {
           setShowAlert(false);
         }}
-        cancelText={'Cancelar'}
+        cancelButtonText={'Não'}
         onCancel={() => {
           setShowAlert(false);
           navigation.navigate('Perfil');
         }}
+        cancelable
+        onDismiss={() => setShowAlert(false)}
       />
     </Container>
   );

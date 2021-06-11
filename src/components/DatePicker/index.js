@@ -32,6 +32,7 @@ const DatePickerSelect = ({
   value,
   getValue,
   handleBlur,
+  initiaValue = '',
   width,
   ...rest
 }) => {
@@ -79,6 +80,19 @@ const DatePickerSelect = ({
     inputRef.current.value = selectedDate;
     handleGetValue(selectedDate);
   }, [selectedValue, handleGetValue]);
+
+  useEffect(() => {
+    if (initiaValue) {
+      const [day, month, year] = initiaValue.split('/');
+      console.log(day, month, year);
+      const newDate = new Date();
+      newDate.setDate(day);
+      newDate.setMonth(month - 1);
+      newDate.setFullYear(year);
+      console.log(moment(newDate).format('DD/MM/YYYY'));
+      setSelectedValue(newDate);
+    }
+  }, [initiaValue]);
 
   return (
     <Container isFocused={isFocused} error={error} width={width}>

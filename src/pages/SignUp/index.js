@@ -11,35 +11,28 @@ import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
 import DatePicker from '../../components/DatePicker';
+import LoadingModal from '../../components/LoadingModal';
 
 import {Container, Scroll, Title, FormView, Row} from './styles';
 
 const schema = Yup.object().shape({
-  nome: Yup.string().required('Por favor, digite um nome válido.'),
+  nome: Yup.string().required('Nome inválido.'),
   date: Yup.string()
-    .matches(
-      /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
-      'Por favor, selecione uma data válida.',
-    )
-    .required('Por favor, selecione uma data válida.'),
+    .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/, 'Data inválida.')
+    .required('Data inválida.'),
   cpf: Yup.string()
-    .matches(
-      /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/,
-      'Por favor, digite um CPF válido.',
-    )
-    .required('Por favor, digite um CPF válido.'),
-  email: Yup.string()
-    .email('Por favor, digite um e-mail válido.')
-    .required('Por favor, digite um e-mail válido.'),
+    .matches(/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/, 'CPF inválido.')
+    .required('CPF inválido.'),
+  email: Yup.string().email('E-mail inválido.').required('E-mail inválido.'),
   fone: Yup.string()
     .matches(
       /^\+[5-5]{2} \([1-9]{2}\) [0-9]{5}-[0-9]{4}$/,
-      'Por favor, digite um telefone válido.',
+      'Telefone inválido.',
     )
-    .required('Por favor, digite um telefone válido.'),
-  sexo: Yup.string().required('Por favor, selecione o sexo.'),
-  cidade: Yup.string().required('Por favor, digite uma cidade válida.'),
-  estado: Yup.string().required('Por favor, selecione o estado.'),
+    .required('Telefone inválido.'),
+  sexo: Yup.string().required('Selecione o sexo.'),
+  cidade: Yup.string().required('Cidade inválida.'),
+  estado: Yup.string().required('Selecione o estado.'),
 });
 
 const SignUp = () => {
@@ -201,8 +194,8 @@ const SignUp = () => {
           abortEarly: false,
         });
 
-        navigation.navigate('CreatePassword', {accountData: data});
         setLoading(false);
+        navigation.navigate('CreatePassword', {accountData: data});
       } catch (error) {
         let newErrors = {...errors};
         error.inner.forEach(err => {
@@ -254,7 +247,7 @@ const SignUp = () => {
   const handleNameBlur = useCallback(
     async value => {
       const nameSchema = Yup.object().shape({
-        nome: Yup.string().required('Por favor, digite um nome válido.'),
+        nome: Yup.string().required('Nome inválido.'),
       });
 
       const data = {
@@ -287,11 +280,8 @@ const SignUp = () => {
     async value => {
       const cpfSchema = Yup.object().shape({
         cpf: Yup.string()
-          .matches(
-            /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/,
-            'Por favor, digite um CPF válido.',
-          )
-          .required('Por favor, digite um CPF válido.'),
+          .matches(/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/, 'CPF inválido.')
+          .required('CPF inválido.'),
       });
 
       const data = {
@@ -324,8 +314,8 @@ const SignUp = () => {
     async value => {
       const emailSchema = Yup.object().shape({
         email: Yup.string()
-          .email('Por favor, digite um e-mail válido.')
-          .required('Por favor, digite um e-mail válido.'),
+          .email('E-mail inválido.')
+          .required('E-mail inválido.'),
       });
 
       const data = {
@@ -360,9 +350,9 @@ const SignUp = () => {
         fone: Yup.string()
           .matches(
             /^\+[5-5]{2} \([1-9]{2}\) [0-9]{5}-[0-9]{4}$/,
-            'Por favor, digite um telefone válido.',
+            'Telefone inválido.',
           )
-          .required('Por favor, digite um telefone válido.'),
+          .required('Telefone inválido.'),
       });
 
       const data = {
@@ -394,7 +384,7 @@ const SignUp = () => {
   const handleCityBlur = useCallback(
     async value => {
       const citySchema = Yup.object().shape({
-        cidade: Yup.string().required('Por favor, digite uma cidade válida.'),
+        cidade: Yup.string().required('Cidade inválida.'),
       });
 
       const data = {
@@ -427,11 +417,8 @@ const SignUp = () => {
     async value => {
       const birthDateSchema = Yup.object().shape({
         date: Yup.string()
-          .matches(
-            /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
-            'Por favor, selecione uma data válida.',
-          )
-          .required('Por favor, selecione uma data válida.'),
+          .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/, 'Data inválida.')
+          .required('Data inválida.'),
       });
 
       const data = {
@@ -463,7 +450,7 @@ const SignUp = () => {
   const handleGenderBlur = useCallback(
     async value => {
       const genderSchema = Yup.object().shape({
-        sexo: Yup.string().required('Por favor, selecione o sexo.'),
+        sexo: Yup.string().required('Selecione o sexo.'),
       });
 
       const data = {
@@ -495,7 +482,7 @@ const SignUp = () => {
   const handleStateBlur = useCallback(
     async value => {
       const stateSchema = Yup.object().shape({
-        estado: Yup.string().required('Por favor, selecione o estado.'),
+        estado: Yup.string().required('Selecione o estado.'),
       });
 
       const data = {
@@ -610,8 +597,8 @@ const SignUp = () => {
                 <Row>
                   <DatePicker
                     name="date"
-                    placeholder={'Data'}
-                    label={'Data'}
+                    placeholder={'Nascimento'}
+                    label={'Nascimento'}
                     onChangeText={handleChange('date')}
                     onBlur={handleBlur('date')}
                     handleBlur={value => handleBirthDateBlur(value)}
@@ -674,6 +661,7 @@ const SignUp = () => {
           </Formik>
         </Scroll>
       </KeyboardAvoidingView>
+      <LoadingModal visible={loading} />
     </Container>
   );
 };
