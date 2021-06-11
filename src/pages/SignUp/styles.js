@@ -34,3 +34,10 @@ export const MainText = styled.Text`
 export const FormView = styled.View`
   width: 100%;
 `;
+
+export const Row = styled.View`
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+`;

@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useCallback, useRef} from 'react';
-import {Modal, Keyboard, TouchableOpacity} from 'react-native';
+import {Modal, Keyboard} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {SvgXml} from 'react-native-svg';
 import moment from 'moment';
@@ -21,6 +21,7 @@ import {
   ModalPickerClose,
   PickerContainer,
   DatePickerCommandsContainer,
+  DatePickerCommandsButton,
   DatePickerCommandText,
 } from './styles';
 
@@ -31,6 +32,7 @@ const DatePickerSelect = ({
   value,
   getValue,
   handleBlur,
+  width,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -79,7 +81,7 @@ const DatePickerSelect = ({
   }, [selectedValue, handleGetValue]);
 
   return (
-    <Container isFocused={isFocused} error={error}>
+    <Container isFocused={isFocused} error={error} width={width}>
       <Label>
         {!error && selectedValue !== '' && <LabelText>{label}</LabelText>}
         {error && !modalVisible && (
@@ -106,7 +108,7 @@ const DatePickerSelect = ({
             selectedValue ? moment(selectedValue).format('DD/MM/YYYY') : ''
           }
         />
-        <AuxIcon type={'grey'} icon={'chevronDown'} width={20} height={20} />
+        <AuxIcon type={'grey'} icon={'date'} width={20} height={20} />
       </Content>
       <Modal
         presentationStyle="overFullScreen"
@@ -132,9 +134,9 @@ const DatePickerSelect = ({
               locale="pt-br"
             />
             <DatePickerCommandsContainer>
-              <TouchableOpacity onPress={() => handleSelectValue()}>
+              <DatePickerCommandsButton onPress={() => handleSelectValue()}>
                 <DatePickerCommandText>OK</DatePickerCommandText>
-              </TouchableOpacity>
+              </DatePickerCommandsButton>
             </DatePickerCommandsContainer>
           </PickerContainer>
         </ModalPicker>

@@ -164,8 +164,9 @@ const ChangePassword = ({route}) => {
           contentContainerStyle={{
             flexGrow: 1,
             alignItems: 'center',
+            justifyContent: 'center',
           }}>
-          <Title style={{marginTop: 152}}>Informe uma</Title>
+          <Title style={{marginTop: 52}}>Informe uma</Title>
           <Title>nova senha</Title>
           <Formik
             initialValues={{newPassword: '', confirmPassword: ''}}
@@ -188,8 +189,8 @@ const ChangePassword = ({route}) => {
                 <Input
                   name="confirmPassword"
                   icon="lock"
-                  placeholder={'Senha'}
-                  label={'Senha'}
+                  placeholder={'Confirmar senha'}
+                  label={'Confirmar senha'}
                   password
                   onChangeText={handleChange('confirmPassword')}
                   onBlur={handleBlur('confirmPassword')}
@@ -199,7 +200,7 @@ const ChangePassword = ({route}) => {
                   keyboardType="default"
                 />
                 <Button
-                  style={{marginTop: 70}}
+                  style={{marginTop: 70, marginBottom: 52}}
                   buttonColor={colors.mustard}
                   textColor={colors.white}
                   onPress={() => handleSignIn(values)}>

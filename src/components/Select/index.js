@@ -32,6 +32,7 @@ const Select = ({
   options,
   handleBlur,
   initiaValue = '',
+  width,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -92,7 +93,7 @@ const Select = ({
   }, [initiaValue, handleSelectValeu]);
 
   return (
-    <Container isFocused={isFocused} error={error}>
+    <Container isFocused={isFocused} error={error} width={width}>
       <Label>
         {!error && selectedValue !== '' && <LabelText>{label}</LabelText>}
         {error && !modalVisible && (

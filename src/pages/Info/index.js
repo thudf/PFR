@@ -1,5 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Linking} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 
 import logoImg from '../../assets/logo.png';
@@ -12,6 +13,7 @@ import {
   ContactText,
   Container,
   SocialMedias,
+  SocialMediaButton,
   Scroll,
   Logo,
   MadeBy,
@@ -39,15 +41,29 @@ const Info = () => {
         <ContactText>institutocarolinabandeira@exemplo.com.br</ContactText>
         <ContactText>www.institutocarolinabandeira.com.br</ContactText>
         <SocialMedias>
-          <TouchableOpacity style={{marginRight: 30}}>
+          <SocialMediaButton
+            last={false}
+            onPress={() =>
+              Linking.openURL(
+                'https://www.instagram.com/institutocarolinabandeira/?hl=pt',
+              )
+            }>
             <SvgXml xml={insta} width={27} height={27} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{marginRight: 30}}>
+          </SocialMediaButton>
+          <SocialMediaButton
+            last={false}
+            onPress={() =>
+              Linking.openURL(
+                'https://www.facebook.com/institutocarolinabandeira/',
+              )
+            }>
             <SvgXml xml={face} width={25} height={25} />
-          </TouchableOpacity>
-          <TouchableOpacity>
+          </SocialMediaButton>
+          <SocialMediaButton
+            last
+            onPress={() => Linking.openURL('http://google.com')}>
             <SvgXml xml={linkedin} width={29} height={29} />
-          </TouchableOpacity>
+          </SocialMediaButton>
         </SocialMedias>
         <MadeBy>
           <SvgXml xml={qualitare} width={155} height={20} />

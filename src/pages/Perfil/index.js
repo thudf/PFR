@@ -30,6 +30,7 @@ import {
   UserAvatarButton,
   UserAvatarContainer,
   UserEmptyAvatar,
+  Row,
 } from './styles';
 
 const schema = Yup.object().shape({
@@ -39,6 +40,12 @@ const schema = Yup.object().shape({
       'Por favor, digite um telefone válido.',
     )
     .required('Por favor, digite um telefone válido.'),
+  cpf: Yup.string()
+    .matches(
+      /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/,
+      'Por favor, digite um CPF válido.',
+    )
+    .required('Por favor, digite um CPF válido.'),
   cidade: Yup.string().required('Por favor, digite uma cidade válida.'),
   estado: Yup.string().required('Por favor, selecione o estado.'),
 });
@@ -199,6 +206,7 @@ const SignUp = () => {
     async data => {
       const isEqual =
         data.fone === user.phone &&
+        data.cpf === user.document &&
         data.cidade === user.city &&
         estado === user.state;
 
@@ -217,6 +225,7 @@ const SignUp = () => {
           updateUser({
             ...user,
             phone: data.fone,
+            document: data.cpf,
             city: data.cidade,
             state: data.estado,
           });
@@ -371,6 +380,43 @@ const SignUp = () => {
     [errors],
   );
 
+  const handleCPFBlur = useCallback(
+    async value => {
+      const cpfSchema = Yup.object().shape({
+        cpf: Yup.string()
+          .matches(
+            /^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/,
+            'Por favor, digite um CPF válido.',
+          )
+          .required('Por favor, digite um CPF válido.'),
+      });
+
+      const data = {
+        cpf: value,
+      };
+
+      try {
+        await cpfSchema.validate(data, {
+          abortEarly: false,
+        });
+
+        setErrors({
+          ...errors,
+          cpf: null,
+        });
+      } catch (error) {
+        error.inner.forEach(err => {
+          const {message} = err;
+          setErrors({
+            ...errors,
+            cpf: message,
+          });
+        });
+      }
+    },
+    [errors],
+  );
+
   return (
     <Container>
       <KeyboardAvoidingView
@@ -399,10 +445,26 @@ const SignUp = () => {
           <FormView>
             <Input
               name="nome"
-              label={'Nome'}
+              // label={'Nome'}
               value={user.name}
               editable={false}
             />
+            <Row>
+              <Input
+                name="nascimento"
+                label={'Nascimento'}
+                value={user.birth_date}
+                editable={false}
+                width={'45%'}
+              />
+              <Input
+                name="sexo"
+                label={'Sexo'}
+                value={user.genrer}
+                editable={false}
+                width={'45%'}
+              />
+            </Row>
             <Input
               name="email"
               label={'E-mail'}
@@ -415,6 +477,14 @@ const SignUp = () => {
                   name="fone"
                   label={'Telefone'}
                   value={user.phone}
+                  editable={false}
+                  edit
+                  handleEdit={() => setIsEditing(true)}
+                />
+                <Input
+                  name="cpf"
+                  label={'CPF'}
+                  value={user.document}
                   editable={false}
                   edit
                   handleEdit={() => setIsEditing(true)}
@@ -435,6 +505,7 @@ const SignUp = () => {
             <Formik
               initialValues={{
                 fone: user.phone,
+                cpf: user.document,
                 cidade: user.city,
                 estado: user.state,
               }}
@@ -454,6 +525,20 @@ const SignUp = () => {
                     value={values.fone}
                     error={errors.fone}
                     keyboardType="phone-pad"
+                  />
+                  <Input
+                    name="cpf"
+                    mask={'[999].[999].[999]-[99]'}
+                    placeholder={'CPF'}
+                    label={'CPF'}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    onChangeText={handleChange('cpf')}
+                    onBlur={handleBlur('cpf')}
+                    handleBlur={() => handleCPFBlur(values.cpf)}
+                    value={values.cpf}
+                    error={errors.cpf}
+                    keyboardType="number-pad"
                   />
                   <Input
                     name="cidade"

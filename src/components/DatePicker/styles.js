@@ -3,7 +3,7 @@ import styled, {css} from 'styled-components/native';
 import {colors, fonts} from '../../global';
 
 export const Container = styled.View`
-  width: 100%;
+  width: ${props => (props.width ? props.width : '100%')};
   align-items: center;
   padding-bottom: 10px;
   margin-bottom: 12px;
@@ -83,28 +83,35 @@ export const ModalPicker = styled.View`
 export const ModalPickerClose = styled.TouchableOpacity`
   height: 100%;
   width: 100%;
-  background-color: transparent;
+  background-color: rgba(29, 30, 34, 0.7);
 `;
 
 export const PickerContainer = styled.View`
   position: absolute;
-  top: ${props => (props.pickerTop ? props.pickerTop : 50)}%;
+  top: ${props => (props.pickerTop ? props.pickerTop : 40)}%;
   left: 5%;
   width: 90%;
   background-color: ${colors.darkGrey};
   border-radius: 4px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 20px;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 export const DatePickerCommandsContainer = styled.View`
   width: 100%;
   border-top-color: ${colors.grey};
   border-top-width: 1px;
-  margin-top: 10px;
-  padding-top: 10px;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const DatePickerCommandsButton = styled.TouchableOpacity`
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
   align-items: center;
   justify-content: center;
 `;

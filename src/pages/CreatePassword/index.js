@@ -56,6 +56,8 @@ const CreatePassword = ({route}) => {
 
         const newAccount = {
           name: accountData.nome,
+          document: accountData.cpf,
+          birth_date: accountData.date,
           email: accountData.email,
           phone: accountData.fone,
           genrer: accountData.sexo,
@@ -173,7 +175,7 @@ const CreatePassword = ({route}) => {
             flexGrow: 1,
             alignItems: 'center',
           }}>
-          <Title style={{marginTop: 152}}>Informe</Title>
+          <Title style={{marginTop: 52}}>Informe</Title>
           <Title>uma senha</Title>
           <Formik
             initialValues={{newPassword: '', confirmPassword: ''}}
@@ -196,8 +198,8 @@ const CreatePassword = ({route}) => {
                 <Input
                   name="confirmPassword"
                   icon="lock"
-                  placeholder={'Senha'}
-                  label={'Senha'}
+                  placeholder={'Confirmar senha'}
+                  label={'Confirmar senha'}
                   password
                   onChangeText={handleChange('confirmPassword')}
                   onBlur={handleBlur('confirmPassword')}
@@ -222,7 +224,7 @@ const CreatePassword = ({route}) => {
                   </LGPDText>
                 </View>
                 <Button
-                  style={{marginTop: 70}}
+                  style={{marginTop: 70, marginBottom: 52}}
                   buttonColor={colors.mustard}
                   textColor={colors.white}
                   type="avançar"

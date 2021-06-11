@@ -4,7 +4,7 @@ import TextInputMask from 'react-native-text-input-mask';
 import {colors, fonts} from '../../global';
 
 export const Container = styled.View`
-  width: 100%;
+  width: ${props => (props.width ? props.width : '100%')};
   align-items: center;
   padding-bottom: 10px;
   margin-bottom: 12px;
@@ -28,6 +28,8 @@ export const Label = styled.View`
   width: 100%;
   flex-direction: row;
   align-items: center;
+  justify-content: ${props =>
+    props.textAlign === 'center' ? 'center' : 'flex-start'};
   height: 24px;
 `;
 

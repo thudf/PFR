@@ -83,8 +83,9 @@ const RecoverPassword = () => {
           contentContainerStyle={{
             flexGrow: 1,
             alignItems: 'center',
+            justifyContent: 'center',
           }}>
-          <Title style={{marginTop: 152}}>Recuperar senha</Title>
+          <Title style={{marginTop: 52}}>Recuperar senha</Title>
           <MainText>
             Entre com o e-mail vinculado e enviaremos as instruções para que
             você possa recuperar sua senha
@@ -104,9 +105,11 @@ const RecoverPassword = () => {
                   value={values.email}
                   error={errors.email}
                   keyboardType="email-address"
+                  returnKeyType="send"
+                  onSubmitEditing={() => handleSignIn(values)}
                 />
                 <Button
-                  style={{marginTop: 32}}
+                  style={{marginTop: 32, marginBottom: 52}}
                   buttonColor={colors.mustard}
                   textColor={colors.white}
                   onPress={() => handleSignIn(values)}>

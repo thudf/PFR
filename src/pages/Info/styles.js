@@ -11,6 +11,7 @@ export const Container = styled.View`
 
 export const Scroll = styled.ScrollView`
   flex: 1;
+  width: 100%;
   padding-left: 20px;
   padding-right: 20px;
 `;
@@ -49,6 +50,10 @@ export const SocialMedias = styled.View`
   align-items: center;
   justify-content: center;
   margin-top: 22px;
+`;
+
+export const SocialMediaButton = styled.TouchableOpacity`
+  margin-right: ${props => (props.last ? 0 : 30)}px;
 `;
 
 export const MadeBy = styled.View`

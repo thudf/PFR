@@ -21,13 +21,14 @@ const CheckEmail = () => {
         contentContainerStyle={{
           flexGrow: 1,
           alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        <SvgXml style={{marginTop: 152}} xml={success} width={70} height={70} />
+        <SvgXml style={{marginTop: 52}} xml={success} width={70} height={70} />
         <Title style={{marginTop: 25}}>Sua senha foi</Title>
         <Title>alterada.</Title>
         <Row>
           <Button
-            style={{marginTop: 80}}
+            style={{marginTop: 80, marginBottom: 52}}
             buttonColor={colors.mustard}
             textColor={colors.white}
             onPress={() => navigation.navigate('SignIn')}>

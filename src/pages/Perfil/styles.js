@@ -66,3 +66,10 @@ export const UserAvatarButton = styled.TouchableOpacity`
   border-radius: 16px;
   background-color: ${colors.black};
 `;
+
+export const Row = styled.View`
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+`;

@@ -22,8 +22,9 @@ const CheckEmail = ({route}) => {
         contentContainerStyle={{
           flexGrow: 1,
           alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        <Title style={{marginTop: 152}}>Verifique seu e-mail</Title>
+        <Title style={{marginTop: 52}}>Verifique seu e-mail</Title>
         <MainText>
           Enviamos instruções para o e-mail informado como proceder para
           recuperar sua senha. Não esqueça de verificar sua caixa de spam.
@@ -39,7 +40,7 @@ const CheckEmail = ({route}) => {
           Não recebi o e-mail
         </Button>
         <Button
-          style={{marginTop: 15}}
+          style={{marginTop: 15, marginBottom: 52}}
           buttonColor={colors.mustard}
           textColor={colors.white}
           type="avançar"

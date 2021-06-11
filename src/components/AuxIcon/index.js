@@ -10,6 +10,7 @@ import arrow_right_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliar
 import arrow_up_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/arrow_up.svg';
 import clip_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/clip.svg';
 import clipboard_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/clipboard.svg';
+import date_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/date_white.svg';
 import datetime_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/datetime.svg';
 import dots_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/dots.svg';
 import eye_off_white from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/eye_off.svg';
@@ -33,6 +34,7 @@ import arrow_up_grey from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/g
 import chevron_down from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/grey/chevron_down.svg';
 import clip_grey from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/grey/clip.svg';
 import clipboard_grey from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/grey/clipboard.svg';
+import date_grey from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/grey/date_grey.svg';
 import datetime_grey from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/grey/datetime.svg';
 import dots_grey from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/grey/dots.svg';
 import eye_off_grey from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/grey/eye_off.svg';
@@ -57,6 +59,7 @@ const AuxIcon = ({type, width, height, icon}) => {
       arrowUp: arrow_up_white,
       clip: clip_white,
       clipboard: clipboard_white,
+      date: date_white,
       datetime: datetime_white,
       dots: dots_white,
       eyeOff: eye_off_white,
@@ -80,6 +83,7 @@ const AuxIcon = ({type, width, height, icon}) => {
       chevronDown: chevron_down,
       clip: clip_grey,
       clipboard: clipboard_grey,
+      date: date_grey,
       datetime: datetime_grey,
       dots: dots_grey,
       eyeOff: eye_off_grey,

@@ -18,11 +18,23 @@ const HomeButton = ({icon, size, children, ...rest}) => {
     pacientes,
   };
 
+  const sizeIcons = {
+    equipe: 50,
+    unidades: 60,
+    patologias: 70,
+    tratamentos: 50,
+    pacientes: 55,
+  };
+
   return (
     <Container size={size} {...rest}>
       <Header />
       <Main>
-        <SvgXml xml={icons[icon]} width={70} height={70} />
+        <SvgXml
+          xml={icons[icon]}
+          width={sizeIcons[icon]}
+          height={sizeIcons[icon]}
+        />
       </Main>
       <Footer>
         <ButtonText>{children}</ButtonText>

@@ -4,7 +4,6 @@ import {colors, fonts} from '../../global';
 
 export const Container = styled.View`
   flex: 1;
-  /* padding-top: 90px; */
   align-items: center;
   background-color: ${colors.black};
 `;
@@ -19,7 +18,6 @@ export const Content = styled.View`
   width: 88%;
   align-self: center;
   align-items: center;
-  /* margin-top: 40px; */
 `;
 
 export const TextError = styled.Text`

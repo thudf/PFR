@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text} from 'react-native';
 import {SvgXml} from 'react-native-svg';
@@ -27,7 +28,7 @@ const TabRoutes = () => {
       tabBarOptions={{
         keyboardHidesTabBar: true,
         style: {
-          height: 75,
+          height: 55,
           borderTopColor: '#A0A0A0',
           borderTopWidth: 0.5,
           elevation: 0,
@@ -36,8 +37,7 @@ const TabRoutes = () => {
         showLabel: false,
         tabStyle: {
           backgroundColor: colors.black,
-          paddingTop: 15,
-          paddingBottom: 15,
+          paddingTop: 8,
         },
       }}>
       <Tab.Screen
@@ -52,17 +52,17 @@ const TabRoutes = () => {
                 <SvgXml
                   fill="#C5913F"
                   xml={InitActiveIcon}
-                  width={28}
-                  height={25}
+                  width={24}
+                  height={21}
                 />
                 <Text
                   style={{
                     fontFamily: fonts.robotoRegular,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 'bold',
-                    lineHeight: 12,
+                    lineHeight: 11,
                     color: colors.mustard,
-                    marginTop: 5,
+                    marginTop: 4,
                   }}>
                   Início
                 </Text>
@@ -73,15 +73,15 @@ const TabRoutes = () => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <SvgXml xml={InactiveInitIcon} width={28} height={25} />
+                <SvgXml xml={InactiveInitIcon} width={24} height={21} />
                 <Text
                   style={{
                     fontFamily: fonts.robotoRegular,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 'normal',
-                    lineHeight: 12,
+                    lineHeight: 11,
                     color: colors.white,
-                    marginTop: 5,
+                    marginTop: 4,
                   }}>
                   Início
                 </Text>
@@ -100,15 +100,15 @@ const TabRoutes = () => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <SvgXml xml={ChatActiveIcon} width={28} height={25} />
+                <SvgXml xml={ChatActiveIcon} width={24} height={21} />
                 <Text
                   style={{
                     fontFamily: fonts.robotoRegular,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 'bold',
-                    lineHeight: 12,
+                    lineHeight: 11,
                     color: colors.mustard,
-                    marginTop: 5,
+                    marginTop: 4,
                   }}>
                   Chat
                 </Text>
@@ -119,15 +119,15 @@ const TabRoutes = () => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <SvgXml xml={InactiveChatIcon} width={28} height={25} />
+                <SvgXml xml={InactiveChatIcon} width={24} height={21} />
                 <Text
                   style={{
                     fontFamily: fonts.robotoRegular,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 'normal',
-                    lineHeight: 12,
+                    lineHeight: 11,
                     color: colors.white,
-                    marginTop: 5,
+                    marginTop: 4,
                   }}>
                   Chat
                 </Text>
@@ -146,15 +146,15 @@ const TabRoutes = () => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <SvgXml xml={UserActiveIcon} width={28} height={25} />
+                <SvgXml xml={UserActiveIcon} width={24} height={21} />
                 <Text
                   style={{
                     fontFamily: fonts.robotoRegular,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 'bold',
-                    lineHeight: 12,
+                    lineHeight: 11,
                     color: colors.mustard,
-                    marginTop: 5,
+                    marginTop: 4,
                   }}>
                   Perfil
                 </Text>
@@ -165,15 +165,15 @@ const TabRoutes = () => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <SvgXml xml={InactiveUserIcon} width={28} height={25} />
+                <SvgXml xml={InactiveUserIcon} width={24} height={21} />
                 <Text
                   style={{
                     fontFamily: fonts.robotoRegular,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 'normal',
-                    lineHeight: 12,
+                    lineHeight: 11,
                     color: colors.white,
-                    marginTop: 5,
+                    marginTop: 4,
                   }}>
                   Perfil
                 </Text>

@@ -9,7 +9,7 @@ import Button from '../../components/Button';
 
 import success from '../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-confirmado.svg';
 
-import {Container, Scroll, MainText, Title, Row} from './styles';
+import {Container, Scroll, Title, Row} from './styles';
 
 const CheckEmail = () => {
   const navigation = useNavigation();
@@ -21,8 +21,9 @@ const CheckEmail = () => {
         contentContainerStyle={{
           flexGrow: 1,
           alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        <SvgXml style={{marginTop: 152}} xml={success} width={70} height={70} />
+        <SvgXml xml={success} width={70} height={70} />
         <Title style={{marginTop: 25}}>Sua conta foi</Title>
         <Title>criada.</Title>
         <Row>

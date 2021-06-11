@@ -31,6 +31,7 @@ const Input = ({
   value,
   handleBlur,
   editable = true,
+  width,
   ...rest
 }) => {
   const [passwordView, setPasswordView] = useState(false);
@@ -50,8 +51,8 @@ const Input = ({
   }, [password]);
 
   return (
-    <Container isFocused={isFocused} error={error}>
-      <Label>
+    <Container isFocused={isFocused} error={error} width={width}>
+      <Label textAlign={textAlign}>
         {!error && value !== '' && <LabelText>{label}</LabelText>}
         {error && (
           <>

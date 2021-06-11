@@ -13,21 +13,22 @@ export const Container = styled.TouchableOpacity`
 
 export const Header = styled.View`
   width: 100%;
-  height: 25%;
+  height: 28%;
   align-items: center;
   justify-content: center;
 `;
 
 export const Main = styled.View`
   width: 100%;
-  height: 50%;
+  height: 44%;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 export const Footer = styled.View`
   width: 100%;
-  height: 25%;
+  height: 28%;
   align-items: center;
   justify-content: center;
 `;

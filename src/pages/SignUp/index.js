@@ -12,7 +12,7 @@ import Select from '../../components/Select';
 import Button from '../../components/Button';
 import DatePicker from '../../components/DatePicker';
 
-import {Container, Scroll, Title, FormView} from './styles';
+import {Container, Scroll, Title, FormView, Row} from './styles';
 
 const schema = Yup.object().shape({
   nome: Yup.string().required('Por favor, digite um nome válido.'),
@@ -566,18 +566,6 @@ const SignUp = () => {
                   error={errors.nome}
                   keyboardType="default"
                 />
-                <DatePicker
-                  name="date"
-                  placeholder={'Data de nascimento'}
-                  label={'Data de nascimento'}
-                  onChangeText={handleChange('date')}
-                  onBlur={handleBlur('date')}
-                  handleBlur={value => handleBirthDateBlur(value)}
-                  value={values.date}
-                  error={errors.date}
-                  getValue={value => setDate(value)}
-                  options={sexoListOptions}
-                />
                 <Input
                   name="cpf"
                   mask={'[999].[999].[999]-[99]'}
@@ -619,18 +607,34 @@ const SignUp = () => {
                   error={errors.fone}
                   keyboardType="phone-pad"
                 />
-                <Select
-                  name="sexo"
-                  placeholder={'Sexo'}
-                  label={'Sexo'}
-                  onChangeText={handleChange('sexo')}
-                  onBlur={handleBlur('sexo')}
-                  handleBlur={value => handleGenderBlur(value)}
-                  value={values.sexo}
-                  error={errors.sexo}
-                  getValue={value => setSexo(value)}
-                  options={sexoListOptions}
-                />
+                <Row>
+                  <DatePicker
+                    name="date"
+                    placeholder={'Data'}
+                    label={'Data'}
+                    onChangeText={handleChange('date')}
+                    onBlur={handleBlur('date')}
+                    handleBlur={value => handleBirthDateBlur(value)}
+                    value={values.date}
+                    error={errors.date}
+                    getValue={value => setDate(value)}
+                    options={sexoListOptions}
+                    width={'45%'}
+                  />
+                  <Select
+                    name="sexo"
+                    placeholder={'Sexo'}
+                    label={'Sexo'}
+                    onChangeText={handleChange('sexo')}
+                    onBlur={handleBlur('sexo')}
+                    handleBlur={value => handleGenderBlur(value)}
+                    value={values.sexo}
+                    error={errors.sexo}
+                    getValue={value => setSexo(value)}
+                    options={sexoListOptions}
+                    width={'45%'}
+                  />
+                </Row>
                 <Input
                   name="cidade"
                   placeholder={'Cidade'}
