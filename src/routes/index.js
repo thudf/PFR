@@ -24,7 +24,6 @@ const Routes = () => {
   }
 
   return user ? <AppRoutes /> : <AuthRoutes />;
-  // return user ? <AppRoutes /> : <AppRoutes />;
 };
 
 export default Routes;
