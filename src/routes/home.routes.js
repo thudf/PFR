@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {SvgXml} from 'react-native-svg';

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {SvgXml} from 'react-native-svg';
 
@@ -5,6 +6,7 @@ import instagram from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/insta
 import facebook from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/facebook.svg';
 import arrowRight from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/arrow_right.svg';
 import key from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/key.svg';
+import chat from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/add_chat.svg';
 
 import {Container, ButtonText, Icon} from './styles';
 
@@ -15,11 +17,19 @@ const Button = ({
   active = true,
   buttonColor,
   textColor,
+  small = false,
   ...rest
 }) => {
   return (
-    <Container active={active} buttonColor={buttonColor} {...rest}>
+    <Container
+      active={active}
+      buttonColor={buttonColor}
+      small={small}
+      {...rest}>
       {icon && <Icon name={icon} size={20} color={textColor} />}
+      {type === 'chat' && (
+        <SvgXml style={{marginRight: 7}} xml={chat} width={17} height={17} />
+      )}
       {type === 'insta' && (
         <SvgXml
           style={{marginRight: 7}}

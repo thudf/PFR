@@ -5,7 +5,6 @@ import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import {colors, fonts} from '../../global';
 
 export const Container = styled(RectButton)`
-  width: 100%;
   height: 38px;
   background-color: ${props =>
     props.buttonColor ? props.buttonColor : colors.mustard};
@@ -14,10 +13,24 @@ export const Container = styled(RectButton)`
   align-items: center;
   flex-direction: row;
   position: relative;
+
   ${props =>
     !props.active &&
     css`
       opacity: 0.3;
+    `}
+
+  ${props =>
+    !props.small &&
+    css`
+      width: 100%;
+    `}
+
+  ${props =>
+    props.small &&
+    css`
+      padding-right: 40px;
+      padding-left: 40px;
     `}
 `;
 
