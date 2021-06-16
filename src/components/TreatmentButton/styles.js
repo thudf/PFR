@@ -1,4 +1,4 @@
-import styled, {css} from 'styled-components/native';
+import styled from 'styled-components/native';
 import {RectButton} from 'react-native-gesture-handler';
 
 import {colors, fonts} from '../../global';
@@ -26,32 +26,26 @@ export const Content = styled.View`
   justify-content: flex-start;
 `;
 
-export const TeamAvatarContainer = styled.View`
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  background-color: ${colors.grey};
-`;
-
-export const TeamAvatar = styled.Image`
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  align-self: center;
-`;
-
-export const TeamMemberInfoContainer = styled.View`
+export const TreatmentInfoContainer = styled.View`
   margin-left: 8px;
 `;
 
-export const TeamMemberName = styled.Text`
+export const TreatmentTitle = styled.Text`
   font-family: ${fonts.robotoMedium};
   font-size: ${fonts.fontSize16};
   color: ${colors.white};
   line-height: 21px;
 `;
 
-export const TeamMemberSpecialty = styled.Text`
+export const TreatmentDescriptionContainer = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: 8px;
+  min-height: 16px;
+  max-height: 48px;
+`;
+
+export const TreatmentDescription = styled.Text`
   font-family: ${fonts.robotoLight};
   font-size: ${fonts.fontSize14};
   color: ${colors.lightGrey};

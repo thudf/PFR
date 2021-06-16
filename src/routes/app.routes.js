@@ -9,6 +9,8 @@ import arrowLeftIcon from '../assets/carolinaBandeiraIcons/IconesAuxiliares/whit
 
 import TabRoutes from './tab.routes';
 import TeamRoute from './team.routes';
+import TreatmentRoute from './treatment.routes';
+import PathologyRoute from './pathology.routes';
 import Info from '../pages/Info';
 
 const App = createStackNavigator();
@@ -72,6 +74,20 @@ const AppRoutes = () => {
         }}
         name="TeamRoute"
         component={TeamRoute}
+      />
+      <App.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="TreatmentRoute"
+        component={TreatmentRoute}
+      />
+      <App.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="PathologyRoute"
+        component={PathologyRoute}
       />
     </App.Navigator>
   );

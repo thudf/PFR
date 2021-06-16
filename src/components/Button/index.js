@@ -7,6 +7,7 @@ import facebook from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/facebo
 import arrowRight from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/arrow_right.svg';
 import key from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/key.svg';
 import chat from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/add_chat.svg';
+import clipboard from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/white/clipboard.svg';
 
 import {Container, ButtonText, Icon} from './styles';
 
@@ -27,6 +28,14 @@ const Button = ({
       small={small}
       {...rest}>
       {icon && <Icon name={icon} size={20} color={textColor} />}
+      {type === 'read_more' && (
+        <SvgXml
+          style={{marginRight: 7}}
+          xml={clipboard}
+          width={17}
+          height={17}
+        />
+      )}
       {type === 'chat' && (
         <SvgXml style={{marginRight: 7}} xml={chat} width={17} height={17} />
       )}

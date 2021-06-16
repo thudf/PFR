@@ -36,10 +36,16 @@ const Home = () => {
           </HomeButton>
         </Row>
         <Row gap={gap}>
-          <HomeButton icon="patologias" size={size}>
+          <HomeButton
+            icon="patologias"
+            size={size}
+            onPress={() => navigation.navigate('PathologyRoute')}>
             Patologias
           </HomeButton>
-          <HomeButton icon="tratamentos" size={size}>
+          <HomeButton
+            icon="tratamentos"
+            size={size}
+            onPress={() => navigation.navigate('TreatmentRoute')}>
             Tratamentos
           </HomeButton>
         </Row>
