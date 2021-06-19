@@ -1,50 +1,151 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {SvgXml} from 'react-native-svg';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Dimensions} from 'react-native';
+import WebView from 'react-native-webview';
 
-import Button from '../../components/Button';
-import phoneIcon from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/icone-telefone.svg';
+import Button from '../../components/ReadMoreButton';
+import LoadingModal from '../../components/LoadingModal';
+
+import {colors} from '../../global';
 
 import {
-  ContactText,
   Container,
   Scroll,
   MainText,
+  MainTextContainer,
   Title,
-  SubTitle,
-  TeamMemberAvatarContainer,
-  TeamMemberAvatar,
   Row,
-  ContactTitle,
+  PathologyImage,
+  ContainerVideo,
 } from './styles';
 
+const screen = Dimensions.get('screen');
+
 const TeamInfo = ({route}) => {
-  const {teamMember} = route.params;
+  const {pathologyInfo} = route.params;
+
+  const [readMore, setReadMore] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [imageHeight, setImageHeight] = useState(0);
+  const [imageWidth, setImageWidth] = useState(0);
+
+  useEffect(() => {
+    setImageHeight(screen.width * 0.9 * 0.5625);
+    setImageWidth(screen.width * 0.9);
+    setImageLoading(pathologyInfo.image ? true : false);
+
+    if (pathologyInfo.video) {
+      setImageLoading(true);
+      setTimeout(() => {
+        setImageLoading(false);
+      }, 700);
+    }
+  }, [pathologyInfo]);
+
+  const handleVideo = useCallback((video, bkg) => {
+    return (
+      <WebView
+        allowsFullscreenVideo
+        style={{
+          backgroundColor: bkg,
+          flex: 1,
+          borderRadius: 4,
+          paddingBottom: 0,
+          position: 'relative',
+          height: 20,
+          overflow: 'hidden',
+        }}
+        scrollEnabled={false}
+        automaticallyAdjustContentInsets
+        originWhitelist={['*']}
+        mediaPlaybackRequiresUserAction={false}
+        useWebKit
+        scalesPageToFit={false}
+        allowsInlineMediaPlayback
+        source={{
+          html: `
+              <html>
+                <style>
+                  .embed-container {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 95%;
+                    border-radius: 4px;
+                    overflow: hidden;
+                  }
+                  .embed-container iframe, .embed-container object, .embed-container embed {
+                    position: absolute;
+                    top: -5px;
+                    left: 0;
+                    width: 100%;
+                    height: 105%;
+                  }
+                  .player.hide-controlls-mode {
+                    pointer-events: none!important;
+                  }
+                </style>
+                <script src="https://player.vimeo.com/api/player.js"></script>
+                <body>
+                  <div class="embed-container">
+                    <iframe src="https://player.vimeo.com/video/${video}?background=0&autoplay=0"
+                      frameBorder="0"
+                      allow="fullscreen"
+                      webkitAllowFullScreen
+                      mozallowfullscreen
+                      allowFullScreen></iframe>
+                  </div
+                </body>
+              </html>
+            `,
+        }}
+      />
+    );
+  }, []);
+
   return (
     <Container>
       <Scroll
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1, alignItems: 'center'}}>
-        <TeamMemberAvatarContainer>
-          <TeamMemberAvatar source={{uri: teamMember.avatar}} />
-        </TeamMemberAvatarContainer>
-        <Title>{teamMember.name}</Title>
-        <SubTitle>{teamMember.specialty}</SubTitle>
-        <MainText>{teamMember.description}</MainText>
-        <Row>
-          <SvgXml
-            style={{marginRight: 2}}
-            xml={phoneIcon}
-            width={16}
-            height={16}
+        {pathologyInfo.image && (
+          <PathologyImage
+            height={imageHeight}
+            source={{uri: pathologyInfo.image}}
+            onLoadEnd={() => setImageLoading(false)}
           />
-          <ContactTitle>Telefone:</ContactTitle>
+        )}
+
+        {pathologyInfo.video && (
+          <ContainerVideo
+            width={imageWidth}
+            height={imageHeight}
+            loading={imageLoading}>
+            {handleVideo(pathologyInfo.video, 'transparent')}
+          </ContainerVideo>
+        )}
+
+        <Row>
+          <Title>{pathologyInfo.title}</Title>
         </Row>
-        <ContactText>{teamMember.phone}</ContactText>
-        <Button style={{marginBottom: 40}} type="chat" small>
-          Abrir uma conversa
-        </Button>
+
+        <MainTextContainer readMore={readMore}>
+          <MainText>{pathologyInfo.description}</MainText>
+        </MainTextContainer>
+
+        <Row>
+          <Button
+            style={{marginBottom: 52}}
+            type="read_more"
+            buttonColor={colors.grey}
+            small
+            onPress={() => setReadMore(!readMore)}>
+            {readMore ? 'Ler menos' : 'Leia mais'}
+          </Button>
+        </Row>
       </Scroll>
+      <LoadingModal visible={imageLoading} />
     </Container>
   );
 };

@@ -7,26 +7,16 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {colors, fonts} from '../global';
 import arrowLeftIcon from '../assets/carolinaBandeiraIcons/IconesAuxiliares/white/arrow_left.svg';
 
-import TabRoutes from './tab.routes';
-import TeamRoute from './team.routes';
-import TreatmentRoute from './treatment.routes';
-import PathologyRoute from './pathology.routes';
-import UnityRoute from './unity.routes';
-import Info from '../pages/Info';
+import Unity from '../pages/Unity';
 
-const App = createStackNavigator();
+const UnityStack = createStackNavigator();
 
-const AppRoutes = () => {
+const UnityRoutes = () => {
   return (
-    <App.Navigator initialRouteName="MainBottom">
-      <App.Screen
-        options={{headerShown: false}}
-        name="MainBottom"
-        component={TabRoutes}
-      />
-      <App.Screen
+    <UnityStack.Navigator initialRouteName="Unity">
+      <UnityStack.Screen
         options={({navigation}) => ({
-          headerTitle: '',
+          headerTitle: 'Unidades',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             color: colors.white,
@@ -66,39 +56,11 @@ const AppRoutes = () => {
             </TouchableOpacity>
           ),
         })}
-        name="Info"
-        component={Info}
+        name="Unity"
+        component={Unity}
       />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="TeamRoute"
-        component={TeamRoute}
-      />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="TreatmentRoute"
-        component={TreatmentRoute}
-      />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="PathologyRoute"
-        component={PathologyRoute}
-      />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="UnityRoute"
-        component={UnityRoute}
-      />
-    </App.Navigator>
+    </UnityStack.Navigator>
   );
 };
 
-export default AppRoutes;
+export default UnityRoutes;

@@ -93,7 +93,11 @@ const Info = () => {
           </SocialMediaButton>
           <SocialMediaButton
             last
-            onPress={() => Linking.openURL('http://google.com')}>
+            onPress={() =>
+              Linking.openURL(
+                'https://www.linkedin.com/company/instituto-carolina-bandeira/',
+              )
+            }>
             <SvgXml xml={linkedin} width={29} height={29} />
           </SocialMediaButton>
         </SocialMedias>

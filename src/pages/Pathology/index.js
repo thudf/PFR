@@ -4,29 +4,29 @@ import {useNavigation} from '@react-navigation/native';
 
 import LoadingModal from '../../components/LoadingModal';
 import CustomAlert from '../../components/CustomAlert';
-import TeamButton from '../../components/TeamButton';
+import TreatmentButton from '../../components/TreatmentButton';
 
 import api from '../../services/api';
 
 import {Container, Scroll, Content} from './styles';
 
-const Team = () => {
+const Pathology = () => {
   const navigation = useNavigation();
 
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [team, setTeam] = useState([]);
+  const [pathologies, setPathologies] = useState([]);
 
-  const getTeam = useCallback(async () => {
+  const getPathologies = useCallback(async () => {
     setLoading(true);
 
     try {
-      const response = await api.get('team');
+      const response = await api.get('pathologies');
       console.log(response.data);
 
       const {data} = response;
 
-      setTeam(data);
+      setPathologies(data);
 
       setLoading(false);
     } catch (error) {
@@ -36,8 +36,8 @@ const Team = () => {
   }, []);
 
   useEffect(() => {
-    getTeam();
-  }, [getTeam]);
+    getPathologies();
+  }, [getPathologies]);
 
   return (
     <Container>
@@ -45,16 +45,17 @@ const Team = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1, alignItems: 'center'}}>
         <Content>
-          {team &&
-            team.map((member, index) => (
-              <TeamButton
-                key={`${member.avatar}-${member.name}-${index}`}
-                avatar={member.avatar}
-                name={member.name}
-                specialty={member.specialty}
-                isLast={team.length - 1 === index}
+          {pathologies &&
+            pathologies.map((item, index) => (
+              <TreatmentButton
+                key={`${item.title}-${index}`}
+                title={item.title}
+                description={item.description}
+                isLast={pathologies.length - 1 === index}
                 onPress={() =>
-                  navigation.navigate('TeamInfo', {teamMember: team[index]})
+                  navigation.navigate('PathologyInfo', {
+                    pathologyInfo: pathologies[index],
+                  })
                 }
               />
             ))}
@@ -65,12 +66,12 @@ const Team = () => {
         visible={showAlert}
         title={'Ocorreu um erro'}
         message={
-          'Não foi possível encontrar a equipe. Deseja tentar novamente?'
+          'Não foi possível encontrar patologias. Deseja tentar novamente?'
         }
         confirmButtonText={'Sim'}
         onConfirm={() => {
           setShowAlert(false);
-          getTeam();
+          getPathologies();
         }}
         cancelButtonText={'Não'}
         onCancel={() => {
@@ -82,4 +83,4 @@ const Team = () => {
   );
 };
 
-export default Team;
+export default Pathology;

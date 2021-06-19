@@ -31,7 +31,10 @@ const Home = () => {
             onPress={() => navigation.navigate('TeamRoute')}>
             Equipe
           </HomeButton>
-          <HomeButton icon="unidades" size={size}>
+          <HomeButton
+            icon="unidades"
+            size={size}
+            onPress={() => navigation.navigate('UnityRoute')}>
             Unidades
           </HomeButton>
         </Row>

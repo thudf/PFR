@@ -33,7 +33,7 @@ export const MainTextContainer = styled.View`
   ${props =>
     !props.readMore &&
     css`
-      max-height: 180px;
+      max-height: 144px;
     `}
 `;
 
@@ -51,6 +51,18 @@ export const Row = styled.View`
   width: 100%;
   align-items: center;
   justify-content: flex-start;
+`;
+
+export const ContainerVideo = styled.View`
+  height: ${props => props.height}px;
+  border-radius: 4px;
+  /* width: ${props => props.width}px; */
+  width: 100%;
+  margin-top: 30px;
+  margin-left: 0;
+  padding-left: 0;
+  z-index: 99998;
+  background-color: ${props => (props.loading ? colors.grey : 'transparent')};
 `;
 
 export const TreatmentImage = styled.Image`

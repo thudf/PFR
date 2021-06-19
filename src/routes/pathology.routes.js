@@ -17,7 +17,7 @@ const PathologyRoutes = () => {
     <PathologyStack.Navigator initialRouteName="Pathology">
       <PathologyStack.Screen
         options={({navigation}) => ({
-          headerTitle: 'Equipe',
+          headerTitle: 'Patologias',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             color: colors.white,

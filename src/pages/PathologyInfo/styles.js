@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled, {css} from 'styled-components/native';
 
 import {colors, fonts} from '../../global';
 
@@ -16,62 +16,59 @@ export const Scroll = styled.ScrollView`
   padding-right: 20px;
 `;
 
-export const TeamMemberAvatarContainer = styled.View`
-  margin-top: 32px;
-  margin-bottom: 22px;
-  width: 210px;
-  height: 210px;
-  border-radius: 105px;
-  background-color: ${colors.darkGrey};
-`;
-
-export const TeamMemberAvatar = styled.Image`
-  width: 210px;
-  height: 210px;
-  border-radius: 105px;
-  align-self: center;
-`;
-
 export const Title = styled.Text`
   font-family: ${fonts.sourceSerifProLight};
   font-size: ${fonts.fontSize24};
   line-height: 26px;
   color: ${colors.white};
+  text-align: left;
+  margin-top: 30px;
 `;
 
-export const SubTitle = styled.Text`
-  font-family: ${fonts.robotoLight};
-  font-size: ${fonts.fontSize18};
-  line-height: 22px;
-  color: ${colors.white};
+export const MainTextContainer = styled.View`
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 20px;
+
+  ${props =>
+    !props.readMore &&
+    css`
+      max-height: 144px;
+    `}
 `;
 
 export const MainText = styled.Text`
   font-family: ${fonts.robotoLight};
   font-size: ${fonts.fontSize16};
+  line-height: 18px;
   color: ${colors.lightGrey};
   text-align: center;
-  margin-top: 22px;
-  margin-bottom: 40px;
+  text-align: left;
 `;
 
 export const Row = styled.View`
   flex-direction: row;
   width: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
-export const ContactTitle = styled.Text`
-  font-family: ${fonts.robotoLight};
-  font-size: ${fonts.fontSize18};
-  color: ${colors.grey};
+export const ContainerVideo = styled.View`
+  height: ${props => props.height}px;
+  border-radius: 4px;
+  /* width: ${props => props.width}px; */
+  width: 100%;
+  margin-top: 30px;
+  margin-left: 0;
+  padding-left: 0;
+  z-index: 99998;
+  background-color: ${props => (props.loading ? colors.grey : 'transparent')};
 `;
 
-export const ContactText = styled.Text`
-  font-family: ${fonts.robotoRegular};
-  font-size: ${fonts.fontSize24};
-  color: ${colors.white};
-  text-align: center;
-  margin-bottom: 40px;
+export const PathologyImage = styled.Image`
+  width: 100%;
+  height: ${props => (props.height ? props.height : 180)}px;
+  border-radius: 4px;
+  margin-top: 30px;
+  background-color: ${colors.grey};
 `;
