@@ -52,7 +52,7 @@ const Input = ({
   }, [password]);
 
   useEffect(() => {
-    inputRef.current.setNativeProps({
+    inputRef?.current?.setNativeProps({
       style: {
         fontFamily:
           Platform.OS === 'android' ? `${fonts.robotoLight}` : undefined,
