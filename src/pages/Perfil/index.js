@@ -4,8 +4,9 @@ import {KeyboardAvoidingView, Platform, Alert} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
+import ImageResizer from 'react-native-image-resizer';
 
 import {colors} from '../../global';
 
@@ -32,6 +33,13 @@ import {
   UserAvatarContainer,
   UserEmptyAvatar,
   Row,
+  ModalContainer,
+  ModalCard,
+  ModalTitle,
+  ModalButton,
+  ModalButtonText,
+  ModalOption,
+  ModalSelection,
 } from './styles';
 
 const schema = Yup.object().shape({
@@ -56,6 +64,7 @@ const SignUp = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState('');
+  const [modalMediaVisible, setModalMediaVisible] = useState(false);
   const [estadoListOptions] = useState([
     {
       value: 'AC',
@@ -190,6 +199,78 @@ const SignUp = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [userAvatar, setUserAvatar] = useState(false);
 
+  const uploadImage = useCallback(async file => {
+    const upImage = await api
+      .post('upload', file, {
+        // onUploadProgress: progressEvent => {}
+      })
+      .then(response => {
+        console.log(response.data);
+        return response.data;
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+    return upImage;
+  }, []);
+
+  const handleImage = useCallback(
+    async ({response}) => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else if (response.customButton) {
+      } else {
+        try {
+          setLoading(true);
+          const fd = new FormData();
+          fd.append('file', {
+            uri: response.assets[0].uri,
+            type: response.assets[0].type,
+            name: response.assets[0].fileName,
+          });
+          const avatar = await uploadImage(fd);
+          const updatedUser = {
+            ...user,
+            avatar,
+          };
+
+          updateUser(updatedUser);
+        } catch (err) {
+          console.log(err);
+          setLoading(false);
+        }
+      }
+    },
+    [user, updateUser, uploadImage],
+  );
+
+  const getImage = useCallback(
+    typeAction => {
+      const options = {
+        title: 'Selecione a imagem',
+        takePhotoButtonTitle: 'Tirar foto',
+        chooseFromLibraryButtonTitle: 'Selecionar da galeria',
+        cancelButtonTitle: 'Cancelar',
+        storageOptions: {privateDirectory: true},
+      };
+
+      if (typeAction === 'Tirar foto') {
+        try {
+          launchCamera(options, response =>
+            handleImage({response, typeAction}),
+          );
+        } catch (err) {}
+      } else {
+        try {
+          launchImageLibrary(options, response =>
+            handleImage({response, typeAction}),
+          );
+        } catch (err) {}
+      }
+    },
+    [handleImage],
+  );
+
   useEffect(() => {
     console.log(user);
     setDate(user.birth_date);
@@ -247,8 +328,6 @@ const SignUp = () => {
             abortEarly: false,
           });
 
-          console.log('data: ', data);
-
           updateUser({
             ...user,
             name: data.nome,
@@ -273,40 +352,34 @@ const SignUp = () => {
     [errors, estado, user, updateUser, date, sexo],
   );
 
-  const handleUpdateAvatar = useCallback(() => {
-    launchImageLibrary({}, response => {
-      if (response.didCancel) {
-        return;
-      }
+  // const handleUpdateAvatar = useCallback(() => {
+  //   launchImageLibrary({}, response => {
+  //     if (response.didCancel) {
+  //       return;
+  //     }
 
-      if (response.error) {
-        Alert.alert('Erro ao atualizar seu avatar!');
-        return;
-      }
-      const {type, uri, fileName} = response.assets[0];
+  //     if (response.error) {
+  //       Alert.alert('Erro ao atualizar seu avatar!');
+  //       return;
+  //     }
+  //     const {type, uri, fileName} = response.assets[0];
 
-      const data = new FormData();
+  //     const data = new FormData();
 
-      data.append('file', {
-        type,
-        name: fileName,
-        uri,
-      });
+  //     data.append('file', {
+  //       type,
+  //       name: fileName,
+  //       uri,
+  //     });
 
-      api
-        .post('/upload', data)
-        .then(apiResponse => {
-          console.log(apiResponse.data);
-          const updatedUser = {
-            ...user,
-            avatar: apiResponse.data,
-          };
-
-          updateUser(updatedUser);
-        })
-        .catch(error => console.log(error));
-    });
-  }, [user, updateUser]);
+  //     api
+  //       .post('/upload', data)
+  //       .then(apiResponse => {
+  //         console.log(apiResponse.data);
+  //       })
+  //       .catch(error => console.log(error));
+  //   });
+  // }, [user, updateUser]);
 
   const handleNameBlur = useCallback(
     async value => {
@@ -541,9 +614,51 @@ const SignUp = () => {
             )}
             <UserAvatarButton
               activeOpacity={0.6}
-              onPress={() => handleUpdateAvatar()}>
+              onPress={() => setModalMediaVisible(true)}>
               <SvgXml xml={editAvatar} width={32} height={32} />
             </UserAvatarButton>
+            <ModalSelection
+              animationType="fade"
+              visible={modalMediaVisible}
+              transparent
+              callback={data => {
+                setModalMediaVisible(false);
+
+                if (data) {
+                  requestAnimationFrame(() => {
+                    getImage(data);
+                  });
+                }
+              }}>
+              <ModalContainer>
+                <ModalCard>
+                  <ModalTitle>{'Selecione uma foto de perfil'}</ModalTitle>
+                  <ModalOption
+                    onPress={() => {
+                      setModalMediaVisible(false);
+
+                      requestAnimationFrame(() => {
+                        getImage('Tirar foto');
+                      });
+                    }}>
+                    <ModalButtonText>{'Tirar foto'}</ModalButtonText>
+                  </ModalOption>
+                  <ModalOption
+                    onPress={() => {
+                      setModalMediaVisible(false);
+
+                      requestAnimationFrame(() => {
+                        getImage('Selecionar da galeria');
+                      });
+                    }}>
+                    <ModalButtonText>{'Selecionar da galeria'}</ModalButtonText>
+                  </ModalOption>
+                  <ModalButton onPress={() => setModalMediaVisible(false)}>
+                    <ModalButtonText>{'CANCELAR'}</ModalButtonText>
+                  </ModalButton>
+                </ModalCard>
+              </ModalContainer>
+            </ModalSelection>
           </UserAvatarContainer>
           <FormView>
             {!isEditing && (
