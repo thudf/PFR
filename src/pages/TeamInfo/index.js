@@ -1,11 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {Linking} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 
 import Button from '../../components/Button';
 import phoneIcon from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/icone-telefone.svg';
 
 import {
+  ContactButton,
   ContactText,
   Container,
   Scroll,
@@ -40,7 +42,10 @@ const TeamInfo = ({route}) => {
           />
           <ContactTitle>Telefone:</ContactTitle>
         </Row>
-        <ContactText>{teamMember.phone}</ContactText>
+        <ContactButton
+          onPress={() => Linking.openURL(`tel:${teamMember.phone}`)}>
+          <ContactText>{teamMember.phone}</ContactText>
+        </ContactButton>
         <Button style={{marginBottom: 40}} type="chat" small>
           Abrir uma conversa
         </Button>

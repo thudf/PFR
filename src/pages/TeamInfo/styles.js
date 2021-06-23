@@ -68,10 +68,13 @@ export const ContactTitle = styled.Text`
   color: ${colors.grey};
 `;
 
+export const ContactButton = styled.TouchableOpacity`
+  margin-bottom: 40px;
+`;
+
 export const ContactText = styled.Text`
   font-family: ${fonts.robotoRegular};
   font-size: ${fonts.fontSize24};
   color: ${colors.white};
   text-align: center;
-  margin-bottom: 40px;
 `;

@@ -9,7 +9,7 @@ export const Container = styled.View`
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  padding-top: 60px;
+  padding-top: 20px;
   padding-right: 25px;
   padding-bottom: 20px;
   padding-left: 25px;
@@ -28,6 +28,13 @@ export const UnityInfoContainer = styled.View`
   margin-bottom: 10px;
 `;
 
+export const UnityName = styled.Text`
+  font-family: ${fonts.robotoMedium};
+  font-size: ${fonts.fontSize16};
+  color: ${colors.white};
+  line-height: 21px;
+`;
+
 export const UnityAddress = styled.Text`
   font-family: ${fonts.robotoLight};
   font-size: ${fonts.fontSize14};
@@ -42,6 +49,7 @@ export const UnityPhone = styled.Text`
   color: ${colors.lightGrey};
   font-weight: 700;
   line-height: 16px;
+  text-align: left;
 `;
 
 export const Row = styled.View`

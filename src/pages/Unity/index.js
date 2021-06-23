@@ -71,7 +71,8 @@ const Unity = () => {
           {unities &&
             unities.map((item, index) => (
               <UnityButton
-                key={`${item.address}-${index}`}
+                key={`${item.name}-${item.address}-${index}`}
+                name={item.name}
                 address={item.address}
                 main_phone={item.phone}
                 secondary_phone={item.phone_residence}

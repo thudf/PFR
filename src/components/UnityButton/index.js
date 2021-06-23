@@ -8,12 +8,14 @@ import {
   Container,
   Content,
   UnityInfoContainer,
+  UnityName,
   UnityAddress,
   UnityPhone,
   Row,
 } from './styles';
 
 const UnityView = ({
+  name,
   address,
   main_phone,
   secondary_phone,
@@ -25,10 +27,17 @@ const UnityView = ({
     <Container isLast={isLast} {...rest}>
       <Content>
         <UnityInfoContainer>
+          <UnityName>{name}</UnityName>
+        </UnityInfoContainer>
+
+        <UnityInfoContainer>
           <UnityAddress>{address}</UnityAddress>
         </UnityInfoContainer>
 
         <UnityPhone>{main_phone}</UnityPhone>
+        {secondary_phone && (
+          <UnityPhone style={{marginTop: 4}}>{secondary_phone}</UnityPhone>
+        )}
 
         <Row>
           <Button
