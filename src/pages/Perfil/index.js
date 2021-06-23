@@ -18,6 +18,7 @@ import Button from '../../components/Button';
 import DatePicker from '../../components/DatePicker';
 import LoadingModal from '../../components/LoadingModal';
 import CustomAlert from '../../components/CustomAlert';
+import PhotoSelectionModal from '../../components/PhotoSelectionModal';
 
 import editAvatar from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/bt_editar_avatar.svg';
 import userIcon from '../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-equipe.svg';
@@ -33,13 +34,6 @@ import {
   UserAvatarContainer,
   UserEmptyAvatar,
   Row,
-  ModalContainer,
-  ModalCard,
-  ModalTitle,
-  ModalButton,
-  ModalButtonText,
-  ModalOption,
-  ModalSelection,
 } from './styles';
 
 const schema = Yup.object().shape({
@@ -197,6 +191,7 @@ const SignUp = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showAvatarAlert, setShowAvatarAlert] = useState(false);
   const [userAvatar, setUserAvatar] = useState(false);
 
   const uploadImage = useCallback(async file => {
@@ -218,6 +213,7 @@ const SignUp = () => {
     async ({response}) => {
       if (response.didCancel) {
       } else if (response.error) {
+        setShowAvatarAlert(true);
       } else if (response.customButton) {
       } else {
         try {
@@ -238,6 +234,7 @@ const SignUp = () => {
         } catch (err) {
           console.log(err);
           setLoading(false);
+          setShowAvatarAlert(true);
         }
       }
     },
@@ -351,35 +348,6 @@ const SignUp = () => {
     },
     [errors, estado, user, updateUser, date, sexo],
   );
-
-  // const handleUpdateAvatar = useCallback(() => {
-  //   launchImageLibrary({}, response => {
-  //     if (response.didCancel) {
-  //       return;
-  //     }
-
-  //     if (response.error) {
-  //       Alert.alert('Erro ao atualizar seu avatar!');
-  //       return;
-  //     }
-  //     const {type, uri, fileName} = response.assets[0];
-
-  //     const data = new FormData();
-
-  //     data.append('file', {
-  //       type,
-  //       name: fileName,
-  //       uri,
-  //     });
-
-  //     api
-  //       .post('/upload', data)
-  //       .then(apiResponse => {
-  //         console.log(apiResponse.data);
-  //       })
-  //       .catch(error => console.log(error));
-  //   });
-  // }, [user, updateUser]);
 
   const handleNameBlur = useCallback(
     async value => {
@@ -617,48 +585,6 @@ const SignUp = () => {
               onPress={() => setModalMediaVisible(true)}>
               <SvgXml xml={editAvatar} width={32} height={32} />
             </UserAvatarButton>
-            <ModalSelection
-              animationType="fade"
-              visible={modalMediaVisible}
-              transparent
-              callback={data => {
-                setModalMediaVisible(false);
-
-                if (data) {
-                  requestAnimationFrame(() => {
-                    getImage(data);
-                  });
-                }
-              }}>
-              <ModalContainer>
-                <ModalCard>
-                  <ModalTitle>{'Selecione uma foto de perfil'}</ModalTitle>
-                  <ModalOption
-                    onPress={() => {
-                      setModalMediaVisible(false);
-
-                      requestAnimationFrame(() => {
-                        getImage('Tirar foto');
-                      });
-                    }}>
-                    <ModalButtonText>{'Tirar foto'}</ModalButtonText>
-                  </ModalOption>
-                  <ModalOption
-                    onPress={() => {
-                      setModalMediaVisible(false);
-
-                      requestAnimationFrame(() => {
-                        getImage('Selecionar da galeria');
-                      });
-                    }}>
-                    <ModalButtonText>{'Selecionar da galeria'}</ModalButtonText>
-                  </ModalOption>
-                  <ModalButton onPress={() => setModalMediaVisible(false)}>
-                    <ModalButtonText>{'CANCELAR'}</ModalButtonText>
-                  </ModalButton>
-                </ModalCard>
-              </ModalContainer>
-            </ModalSelection>
           </UserAvatarContainer>
           <FormView>
             {!isEditing && (
@@ -889,6 +815,27 @@ const SignUp = () => {
         onCancel={() => setIsEditing(false)}
         cancelable
         onDismiss={() => setShowAlert(false)}
+      />
+      <CustomAlert
+        visible={showAvatarAlert}
+        title={'Ocorreu um erro'}
+        message={
+          'Não foi possível atualizar seu foto de perfil. Deseja tentar novamente?'
+        }
+        confirmButtonText={'Sim'}
+        onConfirm={() => {
+          setShowAvatarAlert(false);
+          setModalMediaVisible(true);
+        }}
+        cancelButtonText={'Não'}
+        onCancel={() => setShowAvatarAlert(false)}
+        cancelable
+        onDismiss={() => setShowAvatarAlert(false)}
+      />
+      <PhotoSelectionModal
+        visible={modalMediaVisible}
+        setVisible={val => setModalMediaVisible(val)}
+        getImage={data => getImage(data)}
       />
     </Container>
   );
