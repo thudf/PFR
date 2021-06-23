@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {TouchableOpacity} from 'react-native';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
+import {TouchableOpacity, Platform} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 
-import {colors} from '../../global';
+import {colors, fonts} from '../../global';
 import AuxIcon from '../../components/AuxIcon';
 
 import warn from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/warn.svg';
@@ -34,6 +34,7 @@ const Input = ({
   width,
   ...rest
 }) => {
+  const inputRef = useRef(null);
   const [passwordView, setPasswordView] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -49,6 +50,15 @@ const Input = ({
   useEffect(() => {
     setPasswordView(password);
   }, [password]);
+
+  useEffect(() => {
+    inputRef?.current?.setNativeProps({
+      style: {
+        fontFamily:
+          Platform.OS === 'android' ? `${fonts.robotoLight}` : undefined,
+      },
+    });
+  }, [passwordView]);
 
   return (
     <Container isFocused={isFocused} error={error} width={width}>
@@ -70,6 +80,7 @@ const Input = ({
         {!mask ? (
           <TextInput
             {...rest}
+            ref={inputRef}
             textAlign={textAlign}
             secureTextEntry={passwordView}
             onFocus={handleInputFocus}

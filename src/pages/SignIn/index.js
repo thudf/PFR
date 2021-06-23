@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import {SvgXml} from 'react-native-svg';
+import {LoginButton, AccessToken, LoginManager} from 'react-native-fbsdk-next';
 
 import {useAuth} from '../../hooks/Auth';
 import {colors} from '../../global';
@@ -41,6 +42,7 @@ const schema = Yup.object().shape({
 const SignIn = () => {
   const {signIn} = useAuth();
   const navigation = useNavigation();
+
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialEmail, setInitialEmail] = useState('');
@@ -154,6 +156,52 @@ const SignIn = () => {
     [errors],
   );
 
+  // const initUser = useCallback(faceToken => {
+  //   fetch(
+  //     'https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' +
+  //       faceToken,
+  //   )
+  //     .then(response => {
+  //       response.json().then(json => {
+  //         console.log('json: ', json);
+
+  //         const ID = json.id;
+  //         console.log('ID ' + ID);
+
+  //         const EM = json.email;
+  //         console.log('Email ' + EM);
+
+  //         const FN = json.first_name;
+  //         console.log('First Name ' + FN);
+  //       });
+  //     })
+  //     .catch(() => {
+  //       console.log('ERROR GETTING DATA FROM FACEBOOK');
+  //     });
+  // }, []);
+
+  // const handleFacebookLogin = useCallback(() => {
+  //   LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+  //     function (result) {
+  //       if (result.isCancelled) {
+  //         console.log('Login cancelled');
+  //       } else {
+  //         console.log(
+  //           'Login success with permissions: ' +
+  //             result.grantedPermissions.toString(),
+  //         );
+  //         AccessToken.getCurrentAccessToken().then(data => {
+  //           console.log('data: ', data);
+  //           initUser(data.accessToken);
+  //         });
+  //       }
+  //     },
+  //     function (error) {
+  //       console.log('Login fail with error: ' + error);
+  //     },
+  //   );
+  // }, [initUser]);
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -241,6 +289,7 @@ const SignIn = () => {
                   buttonColor={colors.darkGrey}
                   textColor={colors.white}
                   style={{marginTop: 20, marginBottom: 50}}>
+                  {/* onPress={() => handleFacebookLogin()}> */}
                   Seguir com Facebook
                 </Button>
               </View>

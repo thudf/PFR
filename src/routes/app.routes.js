@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import {SvgXml} from 'react-native-svg';
@@ -7,6 +8,10 @@ import {colors, fonts} from '../global';
 import arrowLeftIcon from '../assets/carolinaBandeiraIcons/IconesAuxiliares/white/arrow_left.svg';
 
 import TabRoutes from './tab.routes';
+import TeamRoute from './team.routes';
+import TreatmentRoute from './treatment.routes';
+import PathologyRoute from './pathology.routes';
+import UnityRoute from './unity.routes';
 import Info from '../pages/Info';
 
 const App = createStackNavigator();
@@ -63,6 +68,34 @@ const AppRoutes = () => {
         })}
         name="Info"
         component={Info}
+      />
+      <App.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="TeamRoute"
+        component={TeamRoute}
+      />
+      <App.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="TreatmentRoute"
+        component={TreatmentRoute}
+      />
+      <App.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="PathologyRoute"
+        component={PathologyRoute}
+      />
+      <App.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="UnityRoute"
+        component={UnityRoute}
       />
     </App.Navigator>
   );

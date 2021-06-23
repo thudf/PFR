@@ -1,11 +1,13 @@
 import styled, {css} from 'styled-components/native';
 import {RectButton} from 'react-native-gesture-handler';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
 import {colors, fonts} from '../../global';
 
 export const Container = styled(RectButton)`
-  height: 38px;
+  padding-top: 8px;
+  padding-right: 12px;
+  padding-bottom: 8px;
+  padding-left: 12px;
   background-color: ${props =>
     props.buttonColor ? props.buttonColor : colors.mustard};
   border-radius: 4px;
@@ -19,29 +21,10 @@ export const Container = styled(RectButton)`
     css`
       opacity: 0.3;
     `}
-
-  ${props =>
-    !props.small &&
-    css`
-      width: 100%;
-    `}
-
-  ${props =>
-    props.small &&
-    css`
-      padding-right: 40px;
-      padding-left: 40px;
-    `}
 `;
 
 export const ButtonText = styled.Text`
   font-family: ${fonts.robotoRegular};
   font-size: ${fonts.fontSize16};
   color: ${props => (props.textColor ? props.textColor : colors.white)};
-`;
-
-export const Icon = styled(SimpleLineIcon)`
-  position: absolute;
-  top: 30%;
-  left: 16px;
 `;
