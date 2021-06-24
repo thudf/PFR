@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions} from 'react-native';
-import WebView from 'react-native-webview';
+import VideoPlayer from 'react-native-video-player';
 
 import Button from '../../components/ReadMoreButton';
 import LoadingModal from '../../components/LoadingModal';
@@ -29,6 +29,14 @@ const TeamInfo = ({route}) => {
   const [imageHeight, setImageHeight] = useState(0);
   const [imageWidth, setImageWidth] = useState(0);
 
+  const [video, setVideo] = useState({
+    width: undefined,
+    height: undefined,
+    duration: undefined,
+  });
+  const [thumbnailUrl, setThumbnailUrl] = useState(undefined);
+  const [videoUrl, setVideoUrl] = useState(undefined);
+
   useEffect(() => {
     setImageHeight(screen.width * 0.9 * 0.5625);
     setImageWidth(screen.width * 0.9);
@@ -36,73 +44,21 @@ const TeamInfo = ({route}) => {
 
     if (treatmentInfo.video) {
       setImageLoading(true);
-      setTimeout(() => {
-        setImageLoading(false);
-      }, 700);
+
+      global
+        .fetch(`https://player.vimeo.com/video/${treatmentInfo.video}/config`)
+        .then(res => res.json())
+        .then(res => {
+          console.log(res);
+          setThumbnailUrl(res.video.thumbs['640']);
+          setVideoUrl(
+            res.request.files.hls.cdns[res.request.files.hls.default_cdn].url,
+          );
+          setVideo(res.video);
+          setImageLoading(false);
+        });
     }
   }, [treatmentInfo]);
-
-  const handleVideo = useCallback((video, bkg) => {
-    return (
-      <WebView
-        allowsFullscreenVideo
-        style={{
-          backgroundColor: bkg,
-          flex: 1,
-          borderRadius: 4,
-          paddingBottom: 0,
-          position: 'relative',
-          height: 20,
-          overflow: 'hidden',
-        }}
-        scrollEnabled={false}
-        automaticallyAdjustContentInsets
-        originWhitelist={['*']}
-        mediaPlaybackRequiresUserAction={false}
-        useWebKit
-        scalesPageToFit={false}
-        allowsInlineMediaPlayback
-        source={{
-          html: `
-              <html>
-                <style>
-                  .embed-container {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 95%;
-                    border-radius: 4px;
-                    overflow: hidden;
-                  }
-                  .embed-container iframe, .embed-container object, .embed-container embed {
-                    position: absolute;
-                    top: -5px;
-                    left: 0;
-                    width: 100%;
-                    height: 105%;
-                  }
-                  .player.hide-controlls-mode {
-                    pointer-events: none!important;
-                  }
-                </style>
-                <script src="https://player.vimeo.com/api/player.js"></script>
-                <body>
-                  <div class="embed-container">
-                    <iframe src="https://player.vimeo.com/video/${video}?background=0&autoplay=0"
-                      frameBorder="0"
-                      allow="fullscreen"
-                      webkitAllowFullScreen
-                      mozallowfullscreen
-                      allowFullScreen></iframe>
-                  </div
-                </body>
-              </html>
-            `,
-        }}
-      />
-    );
-  }, []);
 
   return (
     <Container>
@@ -125,7 +81,49 @@ const TeamInfo = ({route}) => {
             width={imageWidth}
             height={imageHeight}
             loading={imageLoading}>
-            {handleVideo(treatmentInfo.video, 'transparent')}
+            <VideoPlayer
+              endWithThumbnail
+              thumbnail={{uri: thumbnailUrl}}
+              video={{uri: videoUrl}}
+              videoWidth={video.width}
+              videoHeight={video.height}
+              duration={video.duration}
+              hideControlsOnStart
+              pauseOnPress
+              disableSeek
+              customStyles={{
+                seekBarBackground: {
+                  backgroundColor: `${colors.grey}`,
+                },
+                seekBarProgress: {
+                  backgroundColor: `${colors.mustard}`,
+                },
+                controls: {
+                  backgroundColor: `${colors.darkGrey}`,
+                  opacity: 0.85,
+                },
+                controlIcon: {
+                  color: `${colors.mustard}`,
+                },
+                playButton: {
+                  borderTopColor: `${colors.mustard}`,
+                  borderRightColor: `${colors.mustard}`,
+                  borderBottomColor: `${colors.mustard}`,
+                  borderLeftColor: `${colors.mustard}`,
+                  borderTopWidth: 2,
+                  borderRightWidth: 2,
+                  borderBottomWidth: 2,
+                  borderLeftWidth: 2,
+                  backgroundColor: 'transparent',
+                },
+                playArrow: {
+                  color: `${colors.mustard}`,
+                },
+                thumbnail: {
+                  // opacity: 0.65,
+                },
+              }}
+            />
           </ContainerVideo>
         )}
 
