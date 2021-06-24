@@ -54,16 +54,32 @@ export const Row = styled.View`
 `;
 
 export const ContainerVideo = styled.View`
-  height: ${props => props.height - 5}px;
+  position: relative;
+  width: 100%;
+`;
+
+export const ThumbnailImage = styled.Image`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: ${props => (props.height ? props.height : 180)}px;
   border-radius: 4px;
-  /* width: ${props => props.width}px; */
+  margin-top: 30px;
+  background-color: ${colors.grey};
+`;
+
+export const ThumbnailFilter = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   margin-top: 30px;
-  margin-left: 0;
-  padding-left: 0;
-  z-index: 99998;
-  overflow: hidden;
-  background-color: ${props => (props.loading ? colors.grey : 'transparent')};
+  height: ${props => (props.height ? props.height : 180)}px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const TreatmentImage = styled.Image`

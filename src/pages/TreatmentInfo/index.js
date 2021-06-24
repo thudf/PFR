@@ -2,9 +2,12 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions} from 'react-native';
 import VideoPlayer from 'react-native-video-player';
+import {SvgXml} from 'react-native-svg';
 
 import Button from '../../components/ReadMoreButton';
 import LoadingModal from '../../components/LoadingModal';
+
+import playIcon from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/bt-play.svg';
 
 import {colors} from '../../global';
 
@@ -17,6 +20,8 @@ import {
   Row,
   TreatmentImage,
   ContainerVideo,
+  ThumbnailFilter,
+  ThumbnailImage,
 } from './styles';
 
 const screen = Dimensions.get('screen');
@@ -38,7 +43,7 @@ const TeamInfo = ({route}) => {
   const [videoUrl, setVideoUrl] = useState(undefined);
 
   useEffect(() => {
-    setImageHeight(screen.width * 0.9 * 0.5625);
+    setImageHeight(screen.width * 0.9 * 0.5625 - 5);
     setImageWidth(screen.width * 0.9);
     setImageLoading(treatmentInfo.image ? true : false);
 
@@ -51,11 +56,14 @@ const TeamInfo = ({route}) => {
         .then(res => {
           console.log(res);
           setThumbnailUrl(res.video.thumbs['640']);
+          console.log('thumbnail: ', res.video.thumbs['640']);
           setVideoUrl(
             res.request.files.hls.cdns[res.request.files.hls.default_cdn].url,
           );
           setVideo(res.video);
           setImageLoading(false);
+          console.log('video_height: ', res.video.height);
+          console.log('video_width: ', res.video.width);
         });
     }
   }, [treatmentInfo]);
@@ -77,25 +85,28 @@ const TeamInfo = ({route}) => {
         )}
 
         {treatmentInfo.video && (
-          <ContainerVideo
-            width={imageWidth}
-            height={imageHeight}
-            loading={imageLoading}>
+          <ContainerVideo>
+            <ThumbnailImage height={imageHeight} source={{uri: thumbnailUrl}} />
+            <ThumbnailFilter height={imageHeight}>
+              <SvgXml xml={playIcon} width={85} height={85} />
+            </ThumbnailFilter>
             <VideoPlayer
               endWithThumbnail
               thumbnail={{uri: thumbnailUrl}}
               video={{uri: videoUrl}}
-              videoWidth={video.width}
-              videoHeight={video.height}
+              videoWidth={640}
+              videoHeight={360}
               duration={video.duration}
               hideControlsOnStart
               pauseOnPress
-              disableSeek
               customStyles={{
                 seekBarBackground: {
                   backgroundColor: `${colors.grey}`,
                 },
                 seekBarProgress: {
+                  backgroundColor: `${colors.mustard}`,
+                },
+                seekBarKnob: {
                   backgroundColor: `${colors.mustard}`,
                 },
                 controls: {
@@ -119,8 +130,21 @@ const TeamInfo = ({route}) => {
                 playArrow: {
                   color: `${colors.mustard}`,
                 },
+                wrapper: {
+                  width: '100%',
+                  marginTop: 30,
+                },
+                video: {
+                  backgroundColor: 'black',
+                },
+                videoWrapper: {
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                },
                 thumbnail: {
-                  // opacity: 0.65,
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  opacity: 0,
                 },
               }}
             />
