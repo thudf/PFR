@@ -54,7 +54,7 @@ export const Row = styled.View`
 `;
 
 export const ContainerVideo = styled.View`
-  height: ${props => props.height}px;
+  height: ${props => props.height - 5}px;
   border-radius: 4px;
   /* width: ${props => props.width}px; */
   width: 100%;
@@ -62,6 +62,7 @@ export const ContainerVideo = styled.View`
   margin-left: 0;
   padding-left: 0;
   z-index: 99998;
+  overflow: hidden;
   background-color: ${props => (props.loading ? colors.grey : 'transparent')};
 `;
 
