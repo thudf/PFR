@@ -26,6 +26,7 @@ export const Title = styled.Text`
   font-size: ${fonts.fontSize24};
   line-height: ${fonts.fontSize24};
   color: ${colors.white};
+  margin-bottom: 9px;
 `;
 
 export const MainText = styled.Text`
@@ -33,7 +34,6 @@ export const MainText = styled.Text`
   font-size: ${fonts.fontSize16};
   color: ${colors.lightGrey};
   text-align: center;
-  margin-top: 40px;
   margin-bottom: 60px;
 `;
 

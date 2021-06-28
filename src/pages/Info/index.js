@@ -68,7 +68,7 @@ const Info = () => {
         <Logo source={logoImg} />
         <Title>Sobre o Instituto</Title>
         <MainText>{infos.description}</MainText>
-        <Title style={{marginBottom: 15}}>Nossos canais</Title>
+        <Title>Nossos canais</Title>
         <ContactText>{infos.phone}</ContactText>
         <ContactText>{infos.email}</ContactText>
         <ContactText>{infos.site}</ContactText>
