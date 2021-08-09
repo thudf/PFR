@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Dimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import HomeButton from '../../components/HomeButton';
+import HomeButton from './components/HomeButton';
 
 import {Container, Row, Scroll} from './styles';
 

@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import LoadingModal from '../../components/LoadingModal';
 import CustomAlert from '../../components/CustomAlert';
-import UnityButton from '../../components/UnityButton';
+import UnityButton from './components/UnityButton';
 
 import api from '../../services/api';
 

@@ -10,7 +10,12 @@ import {
   ModalButton,
 } from './styles';
 
-const PhotoSelectionModal = ({visible, setVisible, getImage}) => {
+const PhotoSelectionModal = ({
+  visible,
+  setVisible,
+  getImage,
+  title = 'Selecione uma foto de perfil',
+}) => {
   return (
     <ModalSelection
       animationType="fade"
@@ -27,7 +32,7 @@ const PhotoSelectionModal = ({visible, setVisible, getImage}) => {
       }}>
       <ModalContainer>
         <ModalCard>
-          <ModalTitle>{'Selecione uma foto de perfil'}</ModalTitle>
+          <ModalTitle>{title}</ModalTitle>
           <ModalOption
             onPress={() => {
               setVisible(false);

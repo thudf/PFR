@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import LoadingModal from '../../components/LoadingModal';
 import CustomAlert from '../../components/CustomAlert';
-import TeamButton from '../../components/TeamButton';
+import TeamButton from './components/TeamButton';
 
 import api from '../../services/api';
 

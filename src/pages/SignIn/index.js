@@ -91,7 +91,6 @@ const SignIn = () => {
 
   const handleEmailBlur = useCallback(
     async value => {
-      console.log('teste');
       const emailSchema = Yup.object().shape({
         email: Yup.string()
           .email('E-mail inválido.')

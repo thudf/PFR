@@ -93,6 +93,7 @@ const TabRoutes = () => {
       />
       <Tab.Screen
         options={{
+          tabBarVisible: false,
           tabBarIcon: ({focused}) =>
             focused ? (
               <View

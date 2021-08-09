@@ -9,9 +9,9 @@ import {colors} from '../../global';
 
 import api from '../../services/api';
 
+import Checkbox from './components/CheckBox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import Checkbox from '../../components/CheckBox';
 import LoadingModal from '../../components/LoadingModal';
 import CustomAlert from '../../components/CustomAlert';
 
@@ -206,7 +206,8 @@ const CreatePassword = ({route}) => {
                 <Checkbox onChange={value => setLgpdChecked(value)} />
                 <View style={{width: '90%', marginLeft: 26, marginTop: 6}}>
                   <LGPDText>
-                    Clicando em finalizar, você concorda com os nossos{' '}
+                    Clicando em finalizar, você concorda com os nossos
+                    {/* //TODO - Link para Termos de uso e LGPD */}
                     <TouchableWithoutFeedback
                       onPress={() => console.log('teste')}>
                       <LinkedText>termos de uso</LinkedText>

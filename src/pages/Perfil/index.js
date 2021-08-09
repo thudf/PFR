@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useCallback, useEffect, useState} from 'react';
-import {KeyboardAvoidingView, Platform, Alert} from 'react-native';
+import {KeyboardAvoidingView, Platform} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
-import ImageResizer from 'react-native-image-resizer';
 
 import {colors} from '../../global';
 

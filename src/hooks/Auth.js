@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
+// import connection from '../services/socket';
 
 const AuthContext = createContext({});
 
@@ -51,9 +52,14 @@ export const AuthProvider = ({children}) => {
     } else {
       setProfile(true);
     }
+
+    // if (data.token) {
+    //   connection.connect(data.token);
+    // }
   }, [data]);
 
   const signOut = useCallback(async () => {
+    // connection.close();
     await AsyncStorage.multiRemove([
       '@carolinaBandeiraApp:token',
       '@carolinaBandeiraApp:user',
@@ -120,8 +126,6 @@ export const AuthProvider = ({children}) => {
         password,
       });
       const {token, user} = response.data;
-      console.log('token: ', token);
-      console.log('user: ', user);
       if (user.active) {
         api.defaults.headers.authorization = `Bearer ${token.token}`;
 

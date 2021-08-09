@@ -1,8 +1,8 @@
 import React from 'react';
-import {Modal, Text} from 'react-native';
-// import {SvgXml} from 'react-native-svg';
+import {Modal} from 'react-native';
+import {SvgXml} from 'react-native-svg';
 
-// import {colors} from '../../global';
+import successIcon from '../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-confirmado_bk.svg';
 
 import {
   ModalAlert,
@@ -30,6 +30,7 @@ const CustomAlert = ({
   onConfirm = () => console.log('confirm'),
   confirmButtonText,
   onDismiss = () => console.log('dismiss'),
+  success = false,
 }) => {
   return (
     <Modal
@@ -47,7 +48,16 @@ const CustomAlert = ({
           }}
         />
         <AlertContainer>
-          {title && (
+          {success && (
+            <SvgXml
+              style={{marginTop: 20, marginBottom: 20}}
+              xml={successIcon}
+              width={53.52}
+              height={52.28}
+            />
+          )}
+
+          {title && !success && (
             <AlertTitleContainer textAlign={titleAlign}>
               <AlertTitle>{title}</AlertTitle>
             </AlertTitleContainer>
