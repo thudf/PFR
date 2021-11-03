@@ -1,10 +1,8 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'react-native-gesture-handler';
 import {StatusBar, Animated} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-native-paper';
-
-import './services/window.js';
 
 import AppProvider from './hooks';
 import Routes from './routes';

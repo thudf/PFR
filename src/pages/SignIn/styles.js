@@ -8,10 +8,18 @@ export const Container = styled.View`
   background-color: ${colors.black};
 `;
 
-export const Row = styled.View`
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
+// export const Row = styled.View`
+//   align-items: center;
+//   justify-content: center;
+//   flex-direction: row;
+// `;
+
+export const Title = styled.Text`
+  margin-top: 80px;
+  margin-bottom: 80px;
+  font-size: 68px;
+  font-family: ${fonts.robotoBold};
+  color: ${colors.white};
 `;
 
 export const Content = styled.View`
@@ -37,6 +45,13 @@ export const ForgotPasswordText = styled.Text`
   color: ${colors.white};
   font-family: ${fonts.robotoMedium};
   text-align: center;
+`;
+
+export const Row = styled.View`
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const CreateAccount = styled.TouchableOpacity`

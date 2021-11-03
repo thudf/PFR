@@ -3,15 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Image,
-  View,
-} from 'react-native';
-import {SvgXml} from 'react-native-svg';
-import {LoginButton, AccessToken, LoginManager} from 'react-native-fbsdk-next';
+import {KeyboardAvoidingView, Platform, ScrollView, Image} from 'react-native';
 
 import {useAuth} from '../../hooks/Auth';
 import {colors} from '../../global';
@@ -22,16 +14,15 @@ import LoadingModal from '../../components/LoadingModal';
 import CustomAlert from '../../components/CustomAlert';
 
 import logoImg from '../../assets/logo.png';
-import ou from '../../assets/carolinaBandeiraIcons/IconesAuxiliares/ou.svg';
 
 import {
   Container,
   Content,
-  ForgotPassword,
-  ForgotPasswordText,
+  Row,
   CreateAccount,
   CreateAccountText,
   CreateText,
+  Title,
 } from './styles';
 
 const schema = Yup.object().shape({
@@ -155,52 +146,6 @@ const SignIn = () => {
     [errors],
   );
 
-  // const initUser = useCallback(faceToken => {
-  //   fetch(
-  //     'https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' +
-  //       faceToken,
-  //   )
-  //     .then(response => {
-  //       response.json().then(json => {
-  //         console.log('json: ', json);
-
-  //         const ID = json.id;
-  //         console.log('ID ' + ID);
-
-  //         const EM = json.email;
-  //         console.log('Email ' + EM);
-
-  //         const FN = json.first_name;
-  //         console.log('First Name ' + FN);
-  //       });
-  //     })
-  //     .catch(() => {
-  //       console.log('ERROR GETTING DATA FROM FACEBOOK');
-  //     });
-  // }, []);
-
-  // const handleFacebookLogin = useCallback(() => {
-  //   LoginManager.logInWithPermissions(['public_profile', 'email']).then(
-  //     function (result) {
-  //       if (result.isCancelled) {
-  //         console.log('Login cancelled');
-  //       } else {
-  //         console.log(
-  //           'Login success with permissions: ' +
-  //             result.grantedPermissions.toString(),
-  //         );
-  //         AccessToken.getCurrentAccessToken().then(data => {
-  //           console.log('data: ', data);
-  //           initUser(data.accessToken);
-  //         });
-  //       }
-  //     },
-  //     function (error) {
-  //       console.log('Login fail with error: ' + error);
-  //     },
-  //   );
-  // }, [initUser]);
-
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -213,10 +158,12 @@ const SignIn = () => {
           contentContainerStyle={{flexGrow: 1}}>
           <Content>
             <>
-              <Image
-                style={{marginTop: 80, marginBottom: 80}}
+              <Title>PFRec</Title>
+              {/* <Image
+                style={{marginTop: 15, width: '80%'}}
                 source={logoImg}
-              />
+                resizeMode="contain"
+              /> */}
               <Formik
                 initialValues={{email: initialEmail, password: initialPassword}}
                 validationSchema={schema}
@@ -251,47 +198,26 @@ const SignIn = () => {
                       onSubmitEditing={() => handleSignIn(values)}
                       error={errors.password}
                     />
-                    <ForgotPassword
-                      onPress={() => navigation.navigate('RecoverPassword')}>
-                      <ForgotPasswordText>Esqueci a senha</ForgotPasswordText>
-                    </ForgotPassword>
                     <Button
+                      style={{marginTop: 25}}
                       buttonColor={colors.mustard}
                       textColor={colors.white}
                       onPress={() => handleSignIn(values)}>
                       Entrar
                     </Button>
-                    <CreateAccount
-                      onPress={() => navigation.navigate('SignUp')}>
-                      <CreateAccountText>Não tem uma conta?</CreateAccountText>
-                      <CreateText>Crie agora.</CreateText>
-                    </CreateAccount>
+
+                    <Row>
+                      <CreateAccount
+                        onPress={() => navigation.navigate('SignUp')}>
+                        <CreateAccountText>
+                          Não tem uma conta?
+                        </CreateAccountText>
+                        <CreateText>Crie agora.</CreateText>
+                      </CreateAccount>
+                    </Row>
                   </>
                 )}
               </Formik>
-              <View
-                style={{
-                  width: '100%',
-                  marginTop: 8,
-                  alignItems: 'center',
-                }}>
-                <SvgXml xml={ou} width={35} height={35} />
-                <Button
-                  type="insta"
-                  buttonColor={colors.darkGrey}
-                  textColor={colors.white}
-                  style={{marginTop: 20}}>
-                  Seguir com Instagram
-                </Button>
-                <Button
-                  type="face"
-                  buttonColor={colors.darkGrey}
-                  textColor={colors.white}
-                  style={{marginTop: 20, marginBottom: 50}}>
-                  {/* onPress={() => handleFacebookLogin()}> */}
-                  Seguir com Facebook
-                </Button>
-              </View>
             </>
           </Content>
         </ScrollView>

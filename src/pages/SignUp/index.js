@@ -7,302 +7,107 @@ import {useNavigation} from '@react-navigation/native';
 
 import {colors} from '../../global';
 
-import Input from '../../components/Input';
-import Select from '../../components/Select';
-import Button from '../../components/Button';
-import DatePicker from '../../components/DatePicker';
-import LoadingModal from '../../components/LoadingModal';
+import api from '../../services/api';
 
-import {Container, Scroll, Title, FormView, Row} from './styles';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import LoadingModal from '../../components/LoadingModal';
+import CustomAlert from '../../components/CustomAlert';
+
+import {Container, Scroll, Title} from './styles';
 
 const schema = Yup.object().shape({
-  nome: Yup.string().required('Nome inválido.'),
-  date: Yup.string()
-    .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/, 'Data inválida.')
-    .required('Data inválida.'),
-  cpf: Yup.string()
-    .matches(/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/, 'CPF inválido.')
-    .required('CPF inválido.'),
+  username: Yup.string().required('Nome de usuário inválido.'),
   email: Yup.string().email('E-mail inválido.').required('E-mail inválido.'),
-  fone: Yup.string()
-    .matches(
-      /^\+[5-5]{2} \([1-9]{2}\) [0-9]{5}-[0-9]{4}$/,
-      'Telefone inválido.',
-    )
-    .required('Telefone inválido.'),
-  sexo: Yup.string().required('Selecione o sexo.'),
-  cidade: Yup.string().required('Cidade inválida.'),
-  estado: Yup.string().required('Selecione o estado.'),
+  password: Yup.string().required('Senha inválida.'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Senha inválida.')
+    .required('Senha inválida.'),
 });
 
 const SignUp = () => {
   const navigation = useNavigation();
+
+  const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [date, setDate] = useState('');
-  const [estadoListOptions] = useState([
-    {
-      value: 'AC',
-      label: 'Acre (AC)',
-    },
-    {
-      value: 'AL',
-      label: 'Alagoas (AL)',
-    },
-    {
-      value: 'AM',
-      label: 'Amazonas (AM)',
-    },
-    {
-      value: 'AP',
-      label: 'Amapá (AP)',
-    },
-    {
-      value: 'BA',
-      label: 'Bahia (BA)',
-    },
-    {
-      value: 'CE',
-      label: 'Ceará (CE)',
-    },
-    {
-      value: 'DF',
-      label: 'Distrito Federal (DF)',
-    },
-    {
-      value: 'ES',
-      label: 'Espírito Santo (ES)',
-    },
-    {
-      value: 'GO',
-      label: 'Goiás (GO)',
-    },
-    {
-      value: 'MA',
-      label: 'Maranhão (MA)',
-    },
-    {
-      value: 'MG',
-      label: 'Minas Gerais (MG)',
-    },
-    {
-      value: 'MT',
-      label: 'Mato Grosso (MT)',
-    },
-    {
-      value: 'MS',
-      label: 'Mato Grosso do Sul (MS)',
-    },
-    {
-      value: 'PA',
-      label: 'Pará (PA)',
-    },
-    {
-      value: 'PB',
-      label: 'Paraíba (PB)',
-    },
-    {
-      value: 'PE',
-      label: 'Pernambuco (PE)',
-    },
-    {
-      value: 'PI',
-      label: 'Piauí (PI)',
-    },
-    {
-      value: 'PR',
-      label: 'Paraná (PR)',
-    },
-    {
-      value: 'RJ',
-      label: 'Rio de Janeiro (RJ)',
-    },
-    {
-      value: 'RN',
-      label: 'Rio Grande do Norte (RN)',
-    },
-    {
-      value: 'RO',
-      label: 'Rondônia (RO)',
-    },
-    {
-      value: 'RR',
-      label: 'Roraima (RR)',
-    },
-    {
-      value: 'RS',
-      label: 'Rio Grande do Sul (RS)',
-    },
-    {
-      value: 'SC',
-      label: 'Santa Catarina (SC)',
-    },
-    {
-      value: 'SE',
-      label: 'Sergipe (SE)',
-    },
-    {
-      value: 'SP',
-      label: 'São Paulo (SP)',
-    },
-    {
-      value: 'TO',
-      label: 'Tocantins (TO)',
-    },
-  ]);
-  const [estado, setEstado] = useState('');
-  const [sexoListOptions] = useState([
-    {
-      value: 'Masculino',
-      label: 'Masculino',
-    },
-    {
-      value: 'Feminino',
-      label: 'Feminino',
-    },
-  ]);
-  const [sexo, setSexo] = useState('');
+  const [initialUserName, setInitialUserName] = useState('');
+  const [initialEmail, setInitialEmail] = useState('');
+  const [initialPassword, setInitialPassword] = useState('');
+  const [initialConfirmPassword, setInitialConfirmPassword] = useState('');
+
   const [errors, setErrors] = useState({
-    nome: null,
-    date: null,
-    cpf: null,
+    username: null,
     email: null,
-    fone: null,
-    sexo: null,
-    cidade: null,
-    estado: null,
+    password: null,
+    confirmPassword: null,
   });
 
-  const handleSignUp = useCallback(
+  useEffect(() => {
+    setInitialUserName('');
+    setInitialEmail('');
+    setInitialPassword('');
+    setInitialConfirmPassword('');
+  }, []);
+
+  const handleSignIn = useCallback(
     async data => {
       setLoading(true);
-      setErrors({
-        nome: null,
-        date: null,
-        cpf: null,
-        email: null,
-        fone: null,
-        sexo: null,
-        cidade: null,
-        estado: null,
-      });
       try {
-        data.sexo = sexo;
-        data.estado = estado;
-        data.date = date;
-
         await schema.validate(data, {
           abortEarly: false,
         });
 
+        const response = await api.get('/core', data);
+
+        console.log('response: ', response);
+
         setLoading(false);
-        navigation.navigate('CreatePassword', {accountData: data});
+        navigation.navigate('CreateAccountSuccess');
       } catch (error) {
-        let newErrors = {...errors};
-        error.inner.forEach(err => {
-          const {path, message} = err;
-          newErrors[path] = message;
-        });
-
-        console.log(newErrors);
-        setErrors(newErrors);
-        setLoading(false);
-      }
-    },
-    [navigation, errors, sexo, estado, date],
-  );
-
-  useEffect(() => {
-    if (sexo) {
-      setErrors(oldErrors => {
-        return {
-          ...oldErrors,
-          sexo: null,
-        };
-      });
-    }
-  }, [sexo]);
-
-  useEffect(() => {
-    if (estado) {
-      setErrors(oldErrors => {
-        return {
-          ...oldErrors,
-          estado: null,
-        };
-      });
-    }
-  }, [estado]);
-
-  useEffect(() => {
-    if (date) {
-      setErrors(oldErrors => {
-        return {
-          ...oldErrors,
-          date: null,
-        };
-      });
-    }
-  }, [date]);
-
-  const handleNameBlur = useCallback(
-    async value => {
-      const nameSchema = Yup.object().shape({
-        nome: Yup.string().required('Nome inválido.'),
-      });
-
-      const data = {
-        nome: value,
-      };
-
-      try {
-        await nameSchema.validate(data, {
-          abortEarly: false,
-        });
-
-        setErrors({
-          ...errors,
-          nome: null,
-        });
-      } catch (error) {
-        error.inner.forEach(err => {
-          const {message} = err;
-          setErrors({
-            ...errors,
-            nome: message,
+        if (error instanceof Yup.ValidationError) {
+          let newErrors = {...errors};
+          error.inner.forEach(err => {
+            const {path, message} = err;
+            newErrors[path] = message;
           });
-        });
+
+          setErrors(newErrors);
+        } else {
+          console.log('error: ', error);
+          setShowAlert(true);
+        }
+
+        setLoading(false);
       }
     },
-    [errors],
+    [errors, navigation],
   );
 
-  const handleCPFBlur = useCallback(
+  const handleUserNameBlur = useCallback(
     async value => {
-      const cpfSchema = Yup.object().shape({
-        cpf: Yup.string()
-          .matches(/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/, 'CPF inválido.')
-          .required('CPF inválido.'),
+      const userNameSchema = Yup.object().shape({
+        username: Yup.string().required('Nome de usuário inválido.'),
       });
 
       const data = {
-        cpf: value,
+        username: value,
       };
 
       try {
-        await cpfSchema.validate(data, {
+        await userNameSchema.validate(data, {
           abortEarly: false,
         });
 
         setErrors({
           ...errors,
-          cpf: null,
+          username: null,
         });
       } catch (error) {
         error.inner.forEach(err => {
           const {message} = err;
           setErrors({
             ...errors,
-            cpf: message,
+            username: message,
           });
         });
       }
@@ -344,36 +149,31 @@ const SignUp = () => {
     [errors],
   );
 
-  const handleFoneBlur = useCallback(
+  const handlePasswordBlur = useCallback(
     async value => {
-      const foneSchema = Yup.object().shape({
-        fone: Yup.string()
-          .matches(
-            /^\+[5-5]{2} \([1-9]{2}\) [0-9]{5}-[0-9]{4}$/,
-            'Telefone inválido.',
-          )
-          .required('Telefone inválido.'),
+      const passwordSchema = Yup.object().shape({
+        password: Yup.string().required('Senha inválida.'),
       });
 
       const data = {
-        fone: value,
+        password: value,
       };
 
       try {
-        await foneSchema.validate(data, {
+        await passwordSchema.validate(data, {
           abortEarly: false,
         });
 
         setErrors({
           ...errors,
-          fone: null,
+          password: null,
         });
       } catch (error) {
         error.inner.forEach(err => {
           const {message} = err;
           setErrors({
             ...errors,
-            fone: message,
+            password: message,
           });
         });
       }
@@ -381,129 +181,34 @@ const SignUp = () => {
     [errors],
   );
 
-  const handleCityBlur = useCallback(
+  const handleConfirmPasswordBlur = useCallback(
     async value => {
-      const citySchema = Yup.object().shape({
-        cidade: Yup.string().required('Cidade inválida.'),
+      console.log('value: ', value);
+      const confirmPasswordSchema = Yup.object().shape({
+        confirmPassword: Yup.string()
+          .oneOf([value.password], 'Senha inválida.')
+          .required('Senha inválida.'),
       });
 
       const data = {
-        cidade: value,
+        confirmPassword: value.confirmPassword,
       };
 
       try {
-        await citySchema.validate(data, {
+        await confirmPasswordSchema.validate(data, {
           abortEarly: false,
         });
 
         setErrors({
           ...errors,
-          cidade: null,
+          confirmPassword: null,
         });
       } catch (error) {
         error.inner.forEach(err => {
           const {message} = err;
           setErrors({
             ...errors,
-            cidade: message,
-          });
-        });
-      }
-    },
-    [errors],
-  );
-
-  const handleBirthDateBlur = useCallback(
-    async value => {
-      const birthDateSchema = Yup.object().shape({
-        date: Yup.string()
-          .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/, 'Data inválida.')
-          .required('Data inválida.'),
-      });
-
-      const data = {
-        date: value,
-      };
-
-      try {
-        await birthDateSchema.validate(data, {
-          abortEarly: false,
-        });
-
-        setErrors({
-          ...errors,
-          date: null,
-        });
-      } catch (error) {
-        error.inner.forEach(err => {
-          const {message} = err;
-          setErrors({
-            ...errors,
-            date: message,
-          });
-        });
-      }
-    },
-    [errors],
-  );
-
-  const handleGenderBlur = useCallback(
-    async value => {
-      const genderSchema = Yup.object().shape({
-        sexo: Yup.string().required('Selecione o sexo.'),
-      });
-
-      const data = {
-        sexo: value,
-      };
-
-      try {
-        await genderSchema.validate(data, {
-          abortEarly: false,
-        });
-
-        setErrors({
-          ...errors,
-          sexo: null,
-        });
-      } catch (error) {
-        error.inner.forEach(err => {
-          const {message} = err;
-          setErrors({
-            ...errors,
-            sexo: message,
-          });
-        });
-      }
-    },
-    [errors],
-  );
-
-  const handleStateBlur = useCallback(
-    async value => {
-      const stateSchema = Yup.object().shape({
-        estado: Yup.string().required('Selecione o estado.'),
-      });
-
-      const data = {
-        estado: value,
-      };
-
-      try {
-        await stateSchema.validate(data, {
-          abortEarly: false,
-        });
-
-        setErrors({
-          ...errors,
-          estado: null,
-        });
-      } catch (error) {
-        error.inner.forEach(err => {
-          const {message} = err;
-          setErrors({
-            ...errors,
-            estado: message,
+            confirmPassword: message,
           });
         });
       }
@@ -526,51 +231,36 @@ const SignUp = () => {
           <Title style={{marginTop: 52}}>Preencha as</Title>
           <Title>informações da sua</Title>
           <Title>conta</Title>
+
           <Formik
             initialValues={{
-              nome: '',
-              date: '',
-              cpf: '',
-              email: '',
-              fone: '',
-              sexo: '',
-              cidade: '',
-              estado: '',
+              username: initialUserName,
+              email: initialEmail,
+              password: initialPassword,
+              confirmPassword: initialConfirmPassword,
             }}
-            onSubmit={handleSignUp}>
+            validationSchema={schema}
+            onSubmit={handleSignIn}>
             {({handleChange, handleBlur, handleSubmit, values}) => (
-              <FormView>
+              <>
                 <Input
-                  name="nome"
-                  placeholder={'Nome'}
-                  label={'Nome'}
+                  name="user"
+                  icon="info"
+                  placeholder={'Nome de usuário'}
+                  label={'Nome de usuário'}
                   autoCorrect={false}
                   autoCapitalize="none"
-                  onChangeText={handleChange('nome')}
-                  onBlur={handleBlur('nome')}
-                  handleBlur={() => handleNameBlur(values.nome)}
-                  value={values.nome}
-                  error={errors.nome}
-                  keyboardType="default"
-                />
-                <Input
-                  name="cpf"
-                  mask={'[999].[999].[999]-[99]'}
-                  placeholder={'CPF'}
-                  label={'CPF'}
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  onChangeText={handleChange('cpf')}
-                  onBlur={handleBlur('cpf')}
-                  handleBlur={() => handleCPFBlur(values.cpf)}
-                  value={values.cpf}
-                  error={errors.cpf}
-                  keyboardType="number-pad"
+                  onChangeText={handleChange('username')}
+                  onBlur={handleBlur('username')}
+                  handleBlur={() => handleUserNameBlur(values.username)}
+                  value={values.username}
+                  error={errors.username}
                 />
                 <Input
                   name="email"
-                  placeholder={'Email'}
-                  label={'Email'}
+                  icon="mail"
+                  placeholder={'E-mail'}
+                  label={'E-mail'}
                   autoCorrect={false}
                   autoCapitalize="none"
                   onChangeText={handleChange('email')}
@@ -581,87 +271,61 @@ const SignUp = () => {
                   keyboardType="email-address"
                 />
                 <Input
-                  name="fone"
-                  mask={'+55 ([99]) [99999]-[9999]'}
-                  placeholder={'Telefone/Whatsapp'}
-                  label={'Telefone/Whatsapp'}
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  onChangeText={handleChange('fone')}
-                  onBlur={handleBlur('fone')}
-                  handleBlur={() => handleFoneBlur(values.fone)}
-                  value={values.fone}
-                  error={errors.fone}
-                  keyboardType="phone-pad"
+                  name="password"
+                  icon="lock"
+                  placeholder={'Senha'}
+                  label={'Senha'}
+                  password
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  handleBlur={() => handlePasswordBlur(values.password)}
+                  value={values.password}
+                  error={errors.password}
                 />
-                <Row>
-                  <DatePicker
-                    name="date"
-                    placeholder={'Nascimento'}
-                    label={'Nascimento'}
-                    onChangeText={handleChange('date')}
-                    onBlur={handleBlur('date')}
-                    handleBlur={value => handleBirthDateBlur(value)}
-                    value={values.date}
-                    error={errors.date}
-                    getValue={value => setDate(value)}
-                    options={sexoListOptions}
-                    width={'45%'}
-                  />
-                  <Select
-                    name="sexo"
-                    placeholder={'Sexo'}
-                    label={'Sexo'}
-                    onChangeText={handleChange('sexo')}
-                    onBlur={handleBlur('sexo')}
-                    handleBlur={value => handleGenderBlur(value)}
-                    value={values.sexo}
-                    error={errors.sexo}
-                    getValue={value => setSexo(value)}
-                    options={sexoListOptions}
-                    width={'45%'}
-                  />
-                </Row>
                 <Input
-                  name="cidade"
-                  placeholder={'Cidade'}
-                  label={'Cidade'}
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  onChangeText={handleChange('cidade')}
-                  onBlur={handleBlur('cidade')}
-                  handleBlur={() => handleCityBlur(values.cidade)}
-                  value={values.cidade}
-                  error={errors.cidade}
-                  keyboardType="default"
-                />
-                <Select
-                  name="estado"
-                  placeholder={'Estado'}
-                  label={'Estado'}
-                  onChangeText={handleChange('estado')}
-                  onBlur={handleBlur('estado')}
-                  handleBlur={value => handleStateBlur(value)}
-                  value={values.estado}
-                  error={errors.estado}
-                  getValue={value => setEstado(value)}
-                  options={estadoListOptions}
+                  name="confirmPassword"
+                  icon="lock"
+                  placeholder={'Confirme a Senha'}
+                  label={'Confirme a Senha'}
+                  password
+                  onChangeText={handleChange('confirmPassword')}
+                  onBlur={handleBlur('confirmPassword')}
+                  handleBlur={() => handleConfirmPasswordBlur(values)}
+                  value={values.confirmPassword}
+                  returnKeyType="send"
+                  onSubmitEditing={() => handleSignIn(values)}
+                  error={errors.confirmPassword}
                 />
                 <Button
-                  style={{marginTop: 64, marginBottom: 64}}
+                  style={{marginTop: 25}}
                   buttonColor={colors.mustard}
                   textColor={colors.white}
                   type="avançar"
                   active={!loading}
-                  onPress={() => !loading && handleSubmit()}>
+                  onPress={() => !loading && handleSignIn(values)}>
                   Avançar
                 </Button>
-              </FormView>
+              </>
             )}
           </Formik>
         </Scroll>
       </KeyboardAvoidingView>
       <LoadingModal visible={loading} />
+      <CustomAlert
+        visible={showAlert}
+        title={'Ocorreu um erro'}
+        message={'Não foi possível criar sua conta. Deseja tentar novamente?'}
+        confirmButtonText={'Sim'}
+        onConfirm={() => {
+          setShowAlert(false);
+        }}
+        cancelButtonText={'Não'}
+        onCancel={() => navigation.navigate('SignIn')}
+        cancelable={true}
+        onDismiss={() => {
+          setShowAlert(false);
+        }}
+      />
     </Container>
   );
 };

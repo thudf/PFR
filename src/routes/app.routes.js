@@ -1,32 +1,18 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
-import {SvgXml} from 'react-native-svg';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {colors, fonts} from '../global';
-import arrowLeftIcon from '../assets/carolinaBandeiraIcons/IconesAuxiliares/white/arrow_left.svg';
 
-import TabRoutes from './tab.routes';
-import TeamRoute from './team.routes';
-import TreatmentRoute from './treatment.routes';
-import PathologyRoute from './pathology.routes';
-import UnityRoute from './unity.routes';
-import Info from '../pages/Info';
+import Home from '../pages/Home';
 
 const App = createStackNavigator();
 
 const AppRoutes = () => {
   return (
-    <App.Navigator initialRouteName="MainBottom">
+    <App.Navigator initialRouteName="Home">
       <App.Screen
-        options={{headerShown: false}}
-        name="MainBottom"
-        component={TabRoutes}
-      />
-      <App.Screen
-        options={({navigation}) => ({
-          headerTitle: '',
+        options={() => ({
+          headerTitle: 'Início',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             color: colors.white,
@@ -41,61 +27,9 @@ const AppRoutes = () => {
             elevation: 0,
             shadowColor: 'transparent',
           },
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingLeft: 15,
-                paddingRight: 15,
-              }}
-              onPress={() => navigation.navigate('Home')}>
-              <SvgXml xml={arrowLeftIcon} width={18} height={18} />
-              <Text
-                style={{
-                  fontFamily: fonts.robotoLight,
-                  fontSize: 16,
-                  color: colors.white,
-                  marginLeft: 5,
-                  lineHeight: 16,
-                }}>
-                voltar
-              </Text>
-            </TouchableOpacity>
-          ),
         })}
-        name="Info"
-        component={Info}
-      />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="TeamRoute"
-        component={TeamRoute}
-      />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="TreatmentRoute"
-        component={TreatmentRoute}
-      />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="PathologyRoute"
-        component={PathologyRoute}
-      />
-      <App.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="UnityRoute"
-        component={UnityRoute}
+        name="Home"
+        component={Home}
       />
     </App.Navigator>
   );

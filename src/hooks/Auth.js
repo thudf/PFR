@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
-// import connection from '../services/socket';
 
 const AuthContext = createContext({});
 
@@ -53,13 +52,12 @@ export const AuthProvider = ({children}) => {
       setProfile(true);
     }
 
-    // if (data.token) {
-    //   connection.connect(data.token);
-    // }
+    if (data.token) {
+      console.log('token: ', data.token);
+    }
   }, [data]);
 
   const signOut = useCallback(async () => {
-    // connection.close();
     await AsyncStorage.multiRemove([
       '@carolinaBandeiraApp:token',
       '@carolinaBandeiraApp:user',
@@ -126,6 +124,7 @@ export const AuthProvider = ({children}) => {
         password,
       });
       const {token, user} = response.data;
+      // if (user.active && user.type === 'medic') {
       if (user.active) {
         api.defaults.headers.authorization = `Bearer ${token.token}`;
 
@@ -133,7 +132,7 @@ export const AuthProvider = ({children}) => {
           ['@carolinaBandeiraApp:token', token.token],
           ['@carolinaBandeiraApp:user', JSON.stringify(user)],
         ]);
-        setData({token, user});
+        setData({token: token.token, user});
       } else {
         throw new Error('Usuário não ativo');
       }

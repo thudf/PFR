@@ -1,40 +1,17 @@
 import React from 'react';
 import {SvgXml} from 'react-native-svg';
 
-import equipe from '../../../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-equipe.svg';
-import unidades from '../../../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-unidades.svg';
-import patologias from '../../../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-maca.svg';
-import tratamentos from '../../../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-tratamentos.svg';
-import pacientes from '../../../../assets/carolinaBandeiraIcons/IconesPrincipais/icone-pacientes.svg';
+import camera from '../../../../assets/carolinaBandeiraIcons/IconesAuxiliares/camera.svg';
+import warn from '../../../../assets/carolinaBandeiraIcons/IconesAuxiliares/warn.svg';
 
 import {Container, ButtonText, Header, Main, Footer} from './styles';
 
-const HomeButton = ({icon, size, children, ...rest}) => {
-  const icons = {
-    equipe,
-    unidades,
-    patologias,
-    tratamentos,
-    pacientes,
-  };
-
-  const sizeIcons = {
-    equipe: 50,
-    unidades: 60,
-    patologias: 70,
-    tratamentos: 50,
-    pacientes: 55,
-  };
-
+const HomeButton = ({size, children, ...rest}) => {
   return (
     <Container size={size} {...rest}>
       <Header />
       <Main>
-        <SvgXml
-          xml={icons[icon]}
-          width={sizeIcons[icon]}
-          height={sizeIcons[icon]}
-        />
+        <SvgXml xml={camera} width={75} height={75} />
       </Main>
       <Footer>
         <ButtonText>{children}</ButtonText>
